@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Household Cleaning Guides</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: #1a1a1a;
+    background: #ffffff;
+    margin: 0;
+    padding: 32px 20px;
+  }
+  .wrap { max-width: 520px; margin: 0 auto; }
+  h1 {
+    font-size: 28px;
+    margin: 0 0 6px 0;
+    letter-spacing: 0.3px;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: #888;
+    margin: 0 0 28px 0;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  a.card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 18px;
+    border: 1.5px solid #e4ded2;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #1a1a1a;
+    transition: border-color 0.15s ease;
+  }
+  a.card:hover { border-color: #A8311E; }
+  a.card .emoji { font-size: 30px; flex-shrink: 0; }
+  a.card .label { font-size: 18px; font-weight: 700; }
+  a.card .sub { font-size: 13px; color: #888; margin-top: 2px; }
+  footer {
+    margin-top: 32px;
+    font-size: 12px;
+    color: #aaa;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🏠 Household Cleaning Guides</h1>
+  <p class="subtitle">Tap a room to open its guide</p>
+  <div class="cards">
+    <a class="card" href="Bathroom.html">
+      <span class="emoji">🚿</span>
+      <span>
+        <div class="label">Bathroom</div>
+        <div class="sub">Daily, every 3 days, weekly, monthly</div>
+      </span>
+    </a>
+    <a class="card" href="Bedroom.html">
+      <span class="emoji">🛏️</span>
+      <span>
+        <div class="label">Bedroom</div>
+        <div class="sub">Same routine for all 3 bedrooms</div>
+      </span>
+    </a>
+    <a class="card" href="Kitchen.html">
+      <span class="emoji">🍳</span>
+      <span>
+        <div class="label">Kitchen</div>
+        <div class="sub">Appliances, fridge zones, stovetop</div>
+      </span>
+    </a>
+    <a class="card" href="living-dining.html">
+      <span class="emoji">🛋️</span>
+      <span>
+        <div class="label">Living Room &amp; Dining Room</div>
+        <div class="sub">Daily and once-in-a-while tasks</div>
+      </span>
+    </a>
+  </div>
+  <footer>For Leni &middot; tap any card to open that room's guide</footer>
+</div>
+</body>
+</html>
