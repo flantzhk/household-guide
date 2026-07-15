@@ -139,6 +139,95 @@
     text-align: right;
   }
 
+  .sectiontitle {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 40px 0 4px 0;
+    padding-bottom: 8px;
+    border-bottom: 3px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sectiontitle .si { width: 22px; height: 22px; stroke: #1a1a1a; stroke-width: 1.8; }
+  .sectionsub { font-size: 13.5px; color: #777; margin: 6px 0 16px 0; line-height: 1.5; }
+
+  .source {
+    background: #f7f4ee;
+    border-left: 3px solid #A8311E;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #5a4d3d;
+    margin: 10px 0 18px 0;
+    line-height: 1.5;
+  }
+  .source a { color: #A8311E; }
+
+  .daycard {
+    border: 1.5px solid #e4ded2;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .daylabel {
+    width: 84px;
+    flex-shrink: 0;
+    font-weight: 800;
+    font-size: 14px;
+    color: #A8311E;
+    padding-top: 1px;
+  }
+  .daytasks { flex: 1; font-size: 14px; line-height: 1.6; }
+  .daytasks .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 10px;
+    margin-left: 6px;
+    background: #7a5c8a;
+    color: #fff;
+    vertical-align: middle;
+  }
+  .dayoff {
+    border: 1.5px dashed #d8d2c4;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    color: #999;
+    font-style: italic;
+  }
+  .dayoff .daylabel { color: #999; }
+
+  .monthgrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .monthcard {
+    background: #f7f4ee;
+    border: 1.5px solid #e4ded2;
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+  .monthcard .weeklabel {
+    font-size: 12px;
+    font-weight: 800;
+    color: #7a5c8a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .monthcard ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.5; }
+
   @media (max-width: 640px) {
     body { padding: 16px; }
     h1 { font-size: 26px; }
@@ -146,12 +235,16 @@
     .dot { width: 48px; height: 48px; }
     .dot .si { width: 20px; height: 20px; }
     .timeline::before { left: 23px; }
+    .daycard, .dayoff { flex-direction: column; gap: 4px; }
+    .daylabel { width: auto; }
+    .monthgrid { grid-template-columns: 1fr; }
   }
 
   @media print {
     .roomnav { display: none; }
     body { padding: 0; }
-    .row { page-break-inside: avoid; break-inside: avoid; }
+    .row, .daycard, .dayoff, .monthcard { page-break-inside: avoid; break-inside: avoid; }
+    .sectiontitle { page-break-before: always; break-before: page; page-break-after: avoid; }
   }
 
   .si {
@@ -171,6 +264,7 @@
 <symbol id="i-washing-machine" viewBox="0 0 24 24"><path d="M3 6h3" /><path d="M17 6h.01" /><rect width="18" height="20" x="3" y="2" rx="2" /><circle cx="12" cy="13" r="5" /><path d="M12 18a2.5 2.5 0 0 0 0-5 2.5 2.5 0 0 1 0-5" /></symbol>
 <symbol id="i-heart" viewBox="0 0 24 24"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></symbol>
 <symbol id="i-shirt" viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" /></symbol>
+<symbol id="i-calendar-days" viewBox="0 0 24 24"><path d="M8 2v4" /><path d="M16 2v4" /><rect width="18" height="18" x="3" y="4" rx="2" /><path d="M3 10h18" /><path d="M8 14h.01" /><path d="M12 14h.01" /><path d="M16 14h.01" /><path d="M8 18h.01" /><path d="M12 18h.01" /><path d="M16 18h.01" /></symbol>
 </svg>
 <div class="sheet">
   <div class="roomnav">
@@ -184,30 +278,85 @@
 
   <div class="rules">
     <div class="rule">🐕 Dog walks: 3x every day, 20 min each</div>
-    <div class="rule">🍽️ Meals: 3x every day, cooked properly</div>
+    <div class="rule">🍽️ Lunch at 12:00 PM, dinner at 6:00 PM, every day</div>
     <div class="rule">🚪 Workday: 7:00 AM &ndash; 7:00 PM</div>
+    <div class="rule" style="background:#eaf3ea;border-color:#7fa87f;color:#2d5a2d;">🧹 Cleaning time: 5h 45m/day</div>
   </div>
+
+  <div class="source">Schedule structure follows real housekeeping guidance, not guesswork: daily tasks stay light and universal, deeper/rotating tasks get assigned to specific weekdays, and ironing moves to a set weekly rota instead of being a daily task. Sources: <a href="https://fairagency.org/answers/template-domestic-helper-schedule-managing-setting-expectations/" target="_blank">Fair Employment Agency</a> (domestic helper schedule templates), <a href="https://www.flylady.net/ask-flylady/please-explain-the-zones" target="_blank">FlyLady</a> (zone/weekly rotation method), <a href="https://organisemyhouse.com/create-perfect-laundry-schedule/" target="_blank">Organise My House</a> (ironing frequency, once or twice weekly on a set day).</div>
 
   <div class="timeline">
     <div class="row"><div class="dot"><svg class="si"><use href="#i-coffee"/></svg></div><div class="info"><div class="time">7:00 AM</div><div class="task">Make coffee</div></div></div>
     <div class="row walk"><div class="dot walk"><svg class="si"><use href="#i-dog"/></svg></div><div class="info"><div class="time">7:10 &ndash; 7:30 AM</div><div class="task">Walk the dog (1st walk)</div><div class="sub">20 minutes</div></div></div>
     <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">7:30 AM</div><div class="task">Prepare breakfast</div><div class="sub">Simple &amp; quick</div></div></div>
     <div class="row laundry"><div class="dot laundry"><svg class="si"><use href="#i-washing-machine"/></svg></div><div class="info"><div class="time">8:00 AM</div><div class="task">Start a load of laundry</div></div></div>
-    <div class="row clean"><div class="dot clean"><svg class="si"><use href="#i-sparkles"/></svg></div><div class="info"><div class="time">8:15 &ndash; 11:15 AM</div><div class="task">House cleaning</div><div class="sub">See each room's guide for the full checklist</div></div></div>
-    <div class="row walk"><div class="dot walk"><svg class="si"><use href="#i-dog"/></svg></div><div class="info"><div class="time">11:15 &ndash; 11:35 AM</div><div class="task">Walk the dog (2nd walk)</div><div class="sub">20 minutes</div></div></div>
-    <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">11:35 AM &ndash; 12:20 PM</div><div class="task">Prepare lunch</div><div class="sub">45 minutes, properly cooked</div></div></div>
-    <div class="row break"><div class="dot break"><svg class="si"><use href="#i-heart"/></svg></div><div class="info"><div class="time">12:20 &ndash; 1:20 PM</div><div class="task">Lunch</div><div class="sub">Everyone eats together, Leni included, this is her lunch hour</div></div></div>
-    <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">1:20 &ndash; 1:50 PM</div><div class="task">Lunch cleanup</div></div></div>
-    <div class="row clean"><div class="dot clean"><svg class="si"><use href="#i-sparkles"/></svg></div><div class="info"><div class="time">1:50 &ndash; 3:30 PM</div><div class="task">Continue cleaning</div><div class="sub">Rotate through the "once in a while" tasks</div></div></div>
-    <div class="row laundry"><div class="dot laundry"><svg class="si"><use href="#i-shirt"/></svg></div><div class="info"><div class="time">3:30 &ndash; 4:00 PM</div><div class="task">Ironing</div><div class="sub">Whatever's dry from this morning's load</div></div></div>
-    <div class="row walk"><div class="dot walk"><svg class="si"><use href="#i-dog"/></svg></div><div class="info"><div class="time">4:00 &ndash; 4:20 PM</div><div class="task">Walk the dog (3rd walk)</div><div class="sub">20 minutes</div></div></div>
-    <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">4:45 &ndash; 5:45 PM</div><div class="task">Prepare dinner</div></div></div>
-    <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">5:45 PM</div><div class="task">Dinner ready</div></div></div>
-    <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">6:15 &ndash; 6:45 PM</div><div class="task">Dinner cleanup</div></div></div>
-    <div class="row"><div class="dot"><svg class="si"><use href="#i-heart"/></svg></div><div class="info"><div class="time">7:00 PM</div><div class="task">Leni leaves for the day</div><div class="sub">6:45&ndash;7:00 PM is buffer, in case anything ran long</div></div></div>
+    <div class="row clean"><div class="dot clean"><svg class="si"><use href="#i-sparkles"/></svg></div><div class="info"><div class="time">8:15 &ndash; 10:50 AM</div><div class="task">House cleaning</div><div class="sub">See each room's guide for the full checklist</div></div></div>
+    <div class="row walk"><div class="dot walk"><svg class="si"><use href="#i-dog"/></svg></div><div class="info"><div class="time">10:50 &ndash; 11:10 AM</div><div class="task">Walk the dog (2nd walk)</div><div class="sub">20 minutes</div></div></div>
+    <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">11:15 AM &ndash; 12:00 PM</div><div class="task">Prepare lunch</div><div class="sub">45 minutes, properly cooked, timed to be ready right at noon</div></div></div>
+    <div class="row break"><div class="dot break"><svg class="si"><use href="#i-heart"/></svg></div><div class="info"><div class="time">12:00 &ndash; 1:00 PM</div><div class="task">Lunch, served at 12:00 PM sharp</div><div class="sub">Everyone eats together, Leni included, this is her lunch hour</div></div></div>
+    <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">1:00 &ndash; 1:30 PM</div><div class="task">Lunch cleanup</div></div></div>
+    <div class="row clean"><div class="dot clean"><svg class="si"><use href="#i-sparkles"/></svg></div><div class="info"><div class="time">1:30 &ndash; 4:40 PM</div><div class="task">Continue cleaning</div><div class="sub">Today's rotating task, see This Week below, plus laundry follow-up</div></div></div>
+    <div class="row walk"><div class="dot walk"><svg class="si"><use href="#i-dog"/></svg></div><div class="info"><div class="time">4:40 &ndash; 5:00 PM</div><div class="task">Walk the dog (3rd walk)</div><div class="sub">20 minutes</div></div></div>
+    <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">5:00 &ndash; 6:00 PM</div><div class="task">Prepare dinner</div><div class="sub">60 minutes, timed to be ready right at 6:00 PM</div></div></div>
+    <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">6:00 PM</div><div class="task">Dinner, served at 6:00 PM sharp</div></div></div>
+    <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">6:30 &ndash; 7:00 PM</div><div class="task">Dinner cleanup</div></div></div>
+    <div class="row"><div class="dot"><svg class="si"><use href="#i-heart"/></svg></div><div class="info"><div class="time">7:00 PM</div><div class="task">Leni leaves for the day</div></div></div>
   </div>
 
-  <footer>Daily Schedule, v5</footer>
+  <div class="sectiontitle"><svg class="si"><use href="#i-calendar-days"/></svg> This Week</div>
+  <div class="sectionsub">Every day's cleaning block (8:15&ndash;10:50 AM and 1:30&ndash;4:40 PM) also covers that day's rotating task below, on top of each room's own daily list. Sunday is Leni's day off.</div>
+
+  <div class="daycard">
+    <div class="daylabel">Monday</div>
+    <div class="daytasks">Change bed sheets &amp; duvet covers, all 3 bedrooms &middot; Fresh towels &amp; bath mat &middot; Ironing <span class="tag">1 of 2</span></div>
+  </div>
+  <div class="daycard">
+    <div class="daylabel">Tuesday</div>
+    <div class="daytasks">Bathroom: deep-clean toilet brush &amp; holder, clean the drains</div>
+  </div>
+  <div class="daycard">
+    <div class="daylabel">Wednesday</div>
+    <div class="daytasks">Kitchen: deep-clean the fridge</div>
+  </div>
+  <div class="daycard">
+    <div class="daylabel">Thursday</div>
+    <div class="daytasks">Fresh towels &amp; bath mat &middot; Ironing <span class="tag">2 of 2</span></div>
+  </div>
+  <div class="daycard">
+    <div class="daylabel">Friday</div>
+    <div class="daytasks">Living/Dining: check sofa covers, deep-dust shelves, wipe the piano, vacuum under &amp; behind the sofa, lift &amp; vacuum under the rug</div>
+  </div>
+  <div class="daycard">
+    <div class="daylabel">Saturday</div>
+    <div class="daytasks">Rotate through the "Once In A While" tasks, see the 4-week cycle below</div>
+  </div>
+  <div class="dayoff">
+    <div class="daylabel">Sunday</div>
+    <div class="daytasks">Day off</div>
+  </div>
+
+  <div class="sectiontitle"><svg class="si"><use href="#i-calendar-days"/></svg> Once A Month</div>
+  <div class="sectionsub">The deeper, occasional tasks from each room's guide, spread across 4 Saturdays so the whole list cycles roughly every month instead of piling up on one day.</div>
+  <div class="monthgrid">
+    <div class="monthcard">
+      <div class="weeklabel">Week 1</div>
+      <ul><li>Bathroom: clear out &amp; wipe under-sink and mirror cabinet shelves</li><li>Kitchen: clean the range hood filter</li><li>Living/Dining: full floor reset</li></ul>
+    </div>
+    <div class="monthcard">
+      <div class="weeklabel">Week 2</div>
+      <ul><li>Bedroom: dust top of wardrobe &amp; high, unreachable areas</li><li>Kitchen: deep-clean the rice cooker</li><li>Living/Dining: rotate &amp; flip sofa cushions</li></ul>
+    </div>
+    <div class="monthcard">
+      <div class="weeklabel">Week 3</div>
+      <ul><li>Bedroom: under the bed</li><li>Kitchen: descale the water dispenser (only if the light is on)</li><li>Living/Dining: dust the piano legs, pedals &amp; bench</li></ul>
+    </div>
+    <div class="monthcard">
+      <div class="weeklabel">Week 4</div>
+      <ul><li>Bedroom: clean the air purifier</li><li>Catch-up: anything skipped the last 3 weeks</li></ul>
+    </div>
+  </div>
+
+  <footer>Daily Schedule, v6</footer>
 </div>
 </body>
 </html>
