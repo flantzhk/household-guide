@@ -66,26 +66,49 @@
 
   /* Smart cards */
   .nowcard {
-    border-radius: 14px;
-    padding: 18px 20px;
-    margin-bottom: 14px;
+    border-radius: 16px;
+    padding: 20px 22px;
+    margin-bottom: 12px;
     color: #fff;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.10);
   }
   .nowcard .label { font-size: 11.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; opacity: 0.85; }
-  .nowcard .task { font-size: 22px; font-weight: 800; margin: 4px 0 2px 0; }
+  .nowcard .task { font-size: 23px; font-weight: 800; margin: 4px 0 2px 0; }
   .nowcard .sub { font-size: 13.5px; opacity: 0.9; }
   .nowcard .next { font-size: 13.5px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.3); opacity: 0.95; }
 
-  .todaycard {
-    background: #f7f4ee;
-    border: 1.5px solid #e4ded2;
+  /* Extra job card: deliberately styled like the "extra" family (amber), NOT like the
+     colored Right Now hero above, so the two are never mistaken for competing status cards. */
+  .extrajobcard {
+    background: #fdf3e3;
+    border: 1.5px solid #d9b673;
     border-radius: 14px;
     padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .extrajobcard .label { font-size: 11.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #8a6f3a; }
+  .extrajobcard .task { font-size: 16.5px; font-weight: 700; margin: 4px 0 1px 0; color: #4a3a1e; }
+  .extrajobcard .sub2 { font-size: 12.5px; color: #8a6f3a; }
+  .extrajobcard ul { margin: 6px 0 0 0; padding-left: 20px; font-size: 14px; line-height: 1.6; }
+
+  /* Weekly, checkbox-free reminder (e.g. dog food) — visually distinct from anything with a checkbox,
+     since there is nowhere for a one-off weekly job like this to persist as "done". */
+  .reminderband {
+    display: none;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: #1f5e52;
+    background: #eaf5f2;
+    border: 1.5px solid #bfe0d8;
+    border-radius: 12px;
+    padding: 12px 16px;
     margin-bottom: 20px;
   }
-  .todaycard .label { font-size: 11.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #A8311E; }
-  .todaycard .task { font-size: 17px; font-weight: 700; margin: 4px 0 2px 0; }
-  .todaycard ul { margin: 6px 0 0 0; padding-left: 20px; font-size: 14px; line-height: 1.6; }
+  .reminderband .remicon { font-size: 18px; line-height: 1.3; }
+  .reminderband .rtext { flex: 1; }
+  .reminderband .rtitle { font-weight: 700; }
+  .reminderband .rnote { font-size: 12px; color: #4a8577; margin-top: 2px; }
 
   /* Extra tasks */
   .sectiontitle-sm {
@@ -102,12 +125,14 @@
     border-radius: 10px;
     padding: 12px 16px;
     margin-bottom: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   }
   .extraitem .extratitle { font-weight: 700; font-size: 14.5px; color: #6b4f1e; }
   .extraitem .extradates { font-size: 12px; color: #8a6f3a; margin-top: 1px; }
   .extraitem ul { margin: 6px 0 0 0; padding-left: 20px; font-size: 14px; line-height: 1.6; }
   .extraitem.expired { display: none; }
   .extraempty { font-size: 14px; color: #999; font-style: italic; padding: 4px 0; }
+  .lastupdated { font-size: 12px; color: #999; margin: -6px 0 10px 0; }
 
   /* Timeline */
   .timeline { position: relative; margin-top: 8px; }
@@ -343,6 +368,7 @@
   <div class="roomnav">
     <span class="active">⏰ Daily Schedule</span>
     <a href="how-to-clean.html">🧹 How to Clean</a>
+    <a href="restocking.html">📦 Restocking List</a>
   </div>
 
   <div class="roomhead">
@@ -353,12 +379,22 @@
   </div>
 
   <div id="now-card" class="nowcard" style="background:#5f9a5f;"></div>
-  <div id="today-card" class="todaycard"></div>
+  <div id="extra-job-card" class="extrajobcard"></div>
+  <div id="dogfood-reminder" class="reminderband">
+    <div class="remicon">🍲</div>
+    <div class="rtext">
+      <div class="rtitle">Weekly: cook a batch of dog food today</div>
+      <div class="rnote">No checkbox here on purpose, there's nowhere for a one-time weekly job like this to save as "done". Just get it done today.</div>
+    </div>
+  </div>
 
   <div class="sectiontitle-sm">📋 Extra Tasks from Faith</div>
+  <!-- Bump this date every time the extra-tasks list below is edited, so Leni can see at a glance whether this section is current. -->
+  <div class="lastupdated">Last updated: 15 Jul 2026</div>
   <div class="priorityband">⭐ Anything Faith adds here comes first, before the regular schedule above. This is also where she'll ask for shopping trips or other errands, not just special one-off jobs.</div>
-  <!-- To add a task: copy the example below, fill in real dates (YYYY-MM-DD) and content.
-       It disappears on its own the day after data-end. Leave data-end off for something with no end date. -->
+  <!-- To add a task: copy the example below, fill in real dates (YYYY-MM-DD) and content, and update the
+       "Last updated" date above. It disappears on its own the day after data-end. Leave data-end off for
+       something with no end date. -->
   <!--
   <div class="extraitem" data-start="2026-07-21" data-end="2026-07-28">
     <div class="extratitle">While Faith is traveling</div>
@@ -386,7 +422,7 @@
     <div class="monthgrid" id="month-grid"></div>
   </details>
 
-  <footer>Daily Schedule, v8</footer>
+  <footer>Daily Schedule, v9</footer>
 </div>
 
 <script>
@@ -533,18 +569,21 @@
     nowCardEl.innerHTML = html;
   }
 
-  // ---- Today's Focus card ----
-  var todayEl = document.getElementById('today-card');
+  // ---- Extra Job card: the ONE special job for today's weekday, on top of the normal
+  // schedule above. Deliberately not styled or labeled like "Right Now" so the two are
+  // never read as competing status updates. ----
+  var extraJobEl = document.getElementById('extra-job-card');
   var wt = WEEKDAY_TASKS[dow];
   if (wt.off) {
-    todayEl.innerHTML = '<div class="label">Today is Sunday</div><div class="task">Day off, no tasks today</div>';
+    extraJobEl.style.display = 'none';
   } else {
+    extraJobEl.style.display = '';
     var focusKey = 'hh_focus_' + todayStr;
     var focusDone = isChecked(focusKey);
-    var html2 = '<div class="label">Today is ' + wt.name + '</div><div class="task">' + wt.html + '</div>';
+    var html2 = '<div class="label">⭐ ' + wt.name + "'s Extra Job</div><div class=\"task\">" + wt.html + '</div><div class="sub2">On top of the normal schedule above, not instead of it</div>';
     var focusLinks = wt.links || [];
     if (wt.monthly) {
-      html2 += '<div class="sub" style="margin-top:8px;">This month\'s rotation, week ' + cycleWeek + ' of 4:</div><ul>';
+      html2 += '<div class="sub2" style="margin-top:8px;">This month\'s rotation, week ' + cycleWeek + ' of 4:</div><ul>';
       MONTH_CYCLE[cycleWeek - 1].forEach(function(t) {
         html2 += '<li>' + t.t + '</li>';
         if (t.url) focusLinks.push({ label: t.t.replace(/&amp;/g, '&').split(':')[0], url: t.url });
@@ -553,11 +592,14 @@
     }
     html2 += linkRow(focusLinks);
     html2 += '<div class="checkline"><input type="checkbox" id="focus-check" ' + (focusDone ? 'checked' : '') + '><label for="focus-check">Done for today</label></div>';
-    todayEl.innerHTML = html2;
+    extraJobEl.innerHTML = html2;
     document.getElementById('focus-check').addEventListener('change', function(e) {
       setChecked(focusKey, e.target.checked);
     });
   }
+
+  // ---- Weekly dog food reminder: Saturdays only, no checkbox by design (nothing to save). ----
+  document.getElementById('dogfood-reminder').style.display = (dow === 6) ? 'flex' : 'none';
 
   // ---- Week grid ----
   var weekEl = document.getElementById('week-grid');

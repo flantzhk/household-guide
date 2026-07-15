@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restocking List</title>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: #1a1a1a;
+    background: #ffffff;
+    margin: 0;
+    padding: 24px;
+  }
+  .sheet { max-width: 620px; margin: 0 auto; }
+
+  .roomnav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .roomnav a, .roomnav span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: 1.5px solid #d8d2c4;
+    color: #6b5a45;
+  }
+  .roomnav a:hover { border-color: #A8311E; color: #A8311E; }
+  .roomnav .active {
+    background: #A8311E;
+    border-color: #A8311E;
+    color: #fff;
+  }
+
+  .roomhead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 4px solid #A8311E;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  h1 { font-size: 30px; margin: 0; letter-spacing: 0.5px; }
+  .lastupdated { font-size: 12px; color: #999; margin: 0 0 16px 0; }
+
+  .notebox {
+    background: #eaf5f2;
+    border: 1.5px solid #bfe0d8;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 14px;
+    color: #1f5e52;
+    line-height: 1.55;
+  }
+  .notebox strong { color: #14453c; }
+
+  .sectiontitle {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 26px 0 10px 0;
+    padding-bottom: 7px;
+    border-bottom: 3px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .itemcard {
+    border: 1.5px solid #e4ded2;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  }
+  .itemcard .itemname { font-weight: 700; font-size: 14.5px; }
+  .itemcard .itemnote { font-size: 13px; color: #777; margin-top: 2px; line-height: 1.5; }
+  .itemcard .itemgap {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #8a6f3a;
+    background: #fdf3e3;
+    border: 1px solid #d9b673;
+    border-radius: 8px;
+    padding: 1px 8px;
+    margin-top: 6px;
+  }
+
+  .placeholder {
+    border: 1.5px dashed #d8d2c4;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 8px;
+    font-size: 13.5px;
+    color: #999;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  footer { margin-top: 28px; font-size: 12px; color: #888; text-align: right; }
+
+  @media (max-width: 640px) {
+    body { padding: 16px; }
+    h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="roomnav">
+    <a href="index.html">⏰ Daily Schedule</a>
+    <a href="how-to-clean.html">🧹 How to Clean</a>
+    <span class="active">📦 Restocking List</span>
+  </div>
+
+  <div class="roomhead">
+    <h1>📦 Restocking List</h1>
+  </div>
+  <div class="lastupdated">Last updated: 15 Jul 2026</div>
+
+  <div class="notebox">
+    <strong>This page is for reference only, nothing here saves or sends a message to Faith.</strong>
+    If you notice anything below is running low or almost finished, please tell Faith directly
+    (message her or let her know in person). Don't wait to find it here again, just tell her.
+  </div>
+
+  <div class="sectiontitle">🧴 Cleaning &amp; Bathroom Products</div>
+
+  <div class="itemcard">
+    <div class="itemname">SWIPE 紅威寶 Super Concentrate Dishwashing Detergent (Original, 900ml refill)</div>
+    <div class="itemnote">Used for both mopping the floor and washing dishes. Currently in use.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">滴潔 超濃縮洗潔精 (2支優惠裝)</div>
+    <div class="itemnote">Backup refill for the dish soap above, already ordered.</div>
+    <div class="itemgap">Backup, not the main bottle</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Clorox Toilet Bowl Cleaner Bleach (Lemon)</div>
+    <div class="itemnote">Toilet cleaning.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Magiclean Toilet Foam (KAO)</div>
+    <div class="itemnote">Alternative/backup toilet cleaner.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Magiclean Glass Cleaner (KAO)</div>
+    <div class="itemnote">Mirrors and glass.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Clorox Tilex Mold &amp; Mildew Remover</div>
+    <div class="itemnote">Shower and tub mold.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Bathroom Bleaching Foam</div>
+    <div class="itemnote">Shower, tub, and tile mold and soap scum. Backup to the Tilex above.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Limescale/descaler spray (acidic type)</div>
+    <div class="itemnote">Taps only, for stubborn mineral buildup. Never mix with any bleach product, acid + bleach makes toxic gas.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Dettol Antibacterial Surface Cleanser (Lime)</div>
+    <div class="itemnote">Sink and counter, bin disinfecting, daily wipe for taps and stainless steel. Non-bleach, safe on chrome.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Lion Tung Kui Lou (獅王通渠佬), Japanese-made</div>
+    <div class="itemnote">Drain cleaner for sinks and shower drains.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Mr Muscle Super Power Plus Kitchen Cleaner</div>
+    <div class="itemnote">Kitchen counters, general degreasing.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Kaneyo IH Induction &amp; Gas Stove Glass Cleaner (400g)</div>
+    <div class="itemnote">The main glass stovetop product. Also used on the kitchen wall and range hood exterior.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Jif Cream with micro crystals</div>
+    <div class="itemnote">Backup for the glass stovetop if the Kaneyo cleaner runs out. Use gently with a soft cloth only, never scrub hard.</div>
+  </div>
+  <div class="itemcard">
+    <div class="itemname">Vanish Oxi Action Pre-Wash Stain Remover</div>
+    <div class="itemnote">For the sofa's removable covers and the fabric dining chair seats.</div>
+    <div class="itemgap">Genuine gap, not yet purchased</div>
+  </div>
+
+  <div class="sectiontitle">🧻 Paper &amp; Toiletries</div>
+  <div class="placeholder">Not filled in yet. Faith: send me the real items (toilet paper, tissues, paper towels, etc.) and I'll add them here with real brands and where you buy them.</div>
+
+  <div class="sectiontitle">🍽️ Kitchen &amp; Food Staples</div>
+  <div class="placeholder">Not filled in yet. Faith: send me the real pantry/food items you want tracked here and I'll add them.</div>
+
+  <div class="sectiontitle">🧺 Laundry</div>
+  <div class="placeholder">Not filled in yet. Faith: send me the real laundry detergent/softener brand and I'll add it here.</div>
+
+  <div class="sectiontitle">🐕 Pet Supplies</div>
+  <div class="placeholder">Dog food is cooked fresh weekly, see the Daily Schedule. Faith: send me any other pet items you want tracked here (treats, poop bags, etc.) and I'll add them.</div>
+
+  <footer>Restocking List, v1</footer>
+</div>
+</body>
+</html>
