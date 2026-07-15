@@ -3,97 +3,507 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Household Cleaning Guides</title>
+<title>Daily Schedule</title>
 <style>
+  @page { size: A4; margin: 12mm; }
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     font-family: "Helvetica Neue", Arial, sans-serif;
     color: #1a1a1a;
     background: #ffffff;
     margin: 0;
-    padding: 32px 20px;
+    padding: 24px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
-  .wrap { max-width: 520px; margin: 0 auto; }
-  h1 {
-    font-size: 28px;
-    margin: 0 0 6px 0;
-    letter-spacing: 0.3px;
-  }
-  .subtitle {
-    font-size: 14px;
-    color: #888;
-    margin: 0 0 28px 0;
-  }
-  .cards {
+  .sheet { max-width: 620px; margin: 0 auto; }
+
+  .roomnav {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
   }
-  a.card {
+  .roomnav a, .roomnav span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: 1.5px solid #d8d2c4;
+    color: #6b5a45;
+  }
+  .roomnav a:hover { border-color: #A8311E; color: #A8311E; }
+  .roomnav .active {
+    background: #A8311E;
+    border-color: #A8311E;
+    color: #fff;
+  }
+
+  .roomhead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 4px solid #A8311E;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  h1 { font-size: 32px; margin: 0; letter-spacing: 0.5px; }
+  h1 .si { width: 1em; height: 1em; vertical-align: -0.15em; margin-right: 6px; stroke-width: 1.8; }
+
+  .metaline {
+    font-size: 13.5px;
+    color: #777;
+    margin: 0 0 20px 0;
+    line-height: 1.6;
+  }
+
+  /* Smart cards */
+  .nowcard {
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+  .nowcard .label { font-size: 11.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; opacity: 0.85; }
+  .nowcard .task { font-size: 22px; font-weight: 800; margin: 4px 0 2px 0; }
+  .nowcard .sub { font-size: 13.5px; opacity: 0.9; }
+  .nowcard .next { font-size: 13.5px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.3); opacity: 0.95; }
+
+  .todaycard {
+    background: #f7f4ee;
+    border: 1.5px solid #e4ded2;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .todaycard .label { font-size: 11.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #A8311E; }
+  .todaycard .task { font-size: 17px; font-weight: 700; margin: 4px 0 2px 0; }
+  .todaycard ul { margin: 6px 0 0 0; padding-left: 20px; font-size: 14px; line-height: 1.6; }
+
+  /* Extra tasks */
+  .sectiontitle-sm {
+    font-size: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 24px 0 10px 0;
+    color: #4a3f30;
+  }
+  .extraitem {
+    background: #fdf3e3;
+    border: 1.5px solid #d9b673;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+  }
+  .extraitem .extratitle { font-weight: 700; font-size: 14.5px; color: #6b4f1e; }
+  .extraitem .extradates { font-size: 12px; color: #8a6f3a; margin-top: 1px; }
+  .extraitem ul { margin: 6px 0 0 0; padding-left: 20px; font-size: 14px; line-height: 1.6; }
+  .extraitem.expired { display: none; }
+  .extraempty { font-size: 14px; color: #999; font-style: italic; padding: 4px 0; }
+
+  /* Timeline */
+  .timeline { position: relative; margin-top: 8px; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 27px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: #e4ded2;
+  }
+  .row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 10px 8px;
+    position: relative;
+    border-radius: 10px;
+  }
+  .row.now { background: #fdf3e3; }
+  .dot {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2.5px solid #A8311E;
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 18px 18px;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .dot.walk { border-color: #4a6f94; }
+  .dot.meal { border-color: #b9975a; }
+  .dot.clean { border-color: #5f9a5f; }
+  .dot.laundry { border-color: #7a5c8a; }
+  .dot.break { border-color: #2c8577; }
+  .dot .si { width: 24px; height: 24px; stroke: #A8311E; stroke-width: 1.8; }
+  .dot.walk .si { stroke: #4a6f94; }
+  .dot.meal .si { stroke: #b9975a; }
+  .dot.clean .si { stroke: #5f9a5f; }
+  .dot.laundry .si { stroke: #7a5c8a; }
+  .dot.break .si { stroke: #2c8577; }
+
+  .info { flex: 1; padding-top: 6px; }
+  .time { font-size: 13.5px; font-weight: 800; color: #A8311E; letter-spacing: 0.3px; }
+  .row.walk .time { color: #4a6f94; }
+  .row.meal .time { color: #b9975a; }
+  .row.clean .time { color: #5f9a5f; }
+  .row.laundry .time { color: #7a5c8a; }
+  .row.break .time { color: #2c8577; }
+  .task { font-size: 17px; font-weight: 700; margin-top: 2px; }
+  .sub { font-size: 13px; color: #777; margin-top: 2px; }
+  .nowbadge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    background: #A8311E;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  footer { margin-top: 24px; font-size: 12px; color: #888; text-align: right; }
+
+  .sectiontitle {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 30px 0 10px 0;
+    padding-bottom: 8px;
+    border-bottom: 3px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sectiontitle .si { width: 20px; height: 20px; stroke: #1a1a1a; stroke-width: 1.8; }
+
+  details.detailsbox {
+    margin-top: 14px;
     border: 1.5px solid #e4ded2;
-    border-radius: 12px;
-    text-decoration: none;
-    color: #1a1a1a;
-    transition: border-color 0.15s ease;
+    border-radius: 10px;
+    padding: 4px 16px;
   }
-  a.card:hover { border-color: #A8311E; }
-  a.card .emoji { font-size: 30px; flex-shrink: 0; }
-  a.card .label { font-size: 18px; font-weight: 700; }
-  a.card .sub { font-size: 13px; color: #888; margin-top: 2px; }
-  footer {
-    margin-top: 32px;
-    font-size: 12px;
-    color: #aaa;
-    text-align: center;
+  details.detailsbox summary {
+    cursor: pointer;
+    padding: 12px 0;
+    font-weight: 700;
+    font-size: 14.5px;
+    color: #6b5a45;
   }
+  details.detailsbox[open] summary { border-bottom: 1px solid #e4ded2; margin-bottom: 10px; }
+  .sectionsub { font-size: 13.5px; color: #777; margin: 0 0 14px 0; line-height: 1.5; }
+
+  .daycard {
+    border: 1.5px solid #e4ded2;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .daycard.today { border-color: #A8311E; border-width: 2px; background: #fdf3ee; }
+  .daylabel { width: 84px; flex-shrink: 0; font-weight: 800; font-size: 14px; color: #A8311E; padding-top: 1px; }
+  .daytasks { flex: 1; font-size: 14px; line-height: 1.6; }
+  .daytasks .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 10px;
+    margin-left: 6px;
+    background: #7a5c8a;
+    color: #fff;
+    vertical-align: middle;
+  }
+  .dayoff {
+    border: 1.5px dashed #d8d2c4;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    color: #999;
+    font-style: italic;
+  }
+  .dayoff .daylabel { color: #999; }
+
+  .monthgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 6px; }
+  .monthcard { background: #f7f4ee; border: 1.5px solid #e4ded2; border-radius: 10px; padding: 10px 14px; }
+  .monthcard.current { border-color: #A8311E; border-width: 2px; background: #fdf3ee; }
+  .monthcard .weeklabel { font-size: 12px; font-weight: 800; color: #7a5c8a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .monthcard ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.5; }
+
+  @media (max-width: 640px) {
+    body { padding: 16px; }
+    h1 { font-size: 26px; }
+    .task { font-size: 16px; }
+    .dot { width: 48px; height: 48px; }
+    .dot .si { width: 20px; height: 20px; }
+    .timeline::before { left: 23px; }
+    .daycard, .dayoff { flex-direction: column; gap: 4px; }
+    .daylabel { width: auto; }
+    .monthgrid { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    .roomnav { display: none; }
+    body { padding: 0; }
+    .row, .daycard, .dayoff, .monthcard, .extraitem { page-break-inside: avoid; break-inside: avoid; }
+    .sectiontitle { page-break-before: always; break-before: page; page-break-after: avoid; }
+    details.detailsbox summary::-webkit-details-marker { display: none; }
+    details.detailsbox summary { list-style: none; }
+  }
+
+  .si { display: inline-block; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>🏠 Household Cleaning Guides</h1>
-  <p class="subtitle">Tap a room to open its guide</p>
-  <div class="cards">
-    <a class="card" href="Bathroom.html">
-      <span class="emoji">🚿</span>
-      <span>
-        <div class="label">Bathroom</div>
-        <div class="sub">Daily, every 3 days, weekly, monthly</div>
-      </span>
-    </a>
-    <a class="card" href="Bedroom.html">
-      <span class="emoji">🛏️</span>
-      <span>
-        <div class="label">Bedroom</div>
-        <div class="sub">Same routine for all 3 bedrooms</div>
-      </span>
-    </a>
-    <a class="card" href="Kitchen.html">
-      <span class="emoji">🍳</span>
-      <span>
-        <div class="label">Kitchen</div>
-        <div class="sub">Appliances, fridge zones, stovetop</div>
-      </span>
-    </a>
-    <a class="card" href="living-dining.html">
-      <span class="emoji">🛋️</span>
-      <span>
-        <div class="label">Living Room &amp; Dining Room</div>
-        <div class="sub">Daily and once-in-a-while tasks</div>
-      </span>
-    </a>
-    <a class="card" href="daily-schedule.html">
-      <span class="emoji">⏰</span>
-      <span>
-        <div class="label">Daily Schedule</div>
-        <div class="sub">The full day, coffee to dinner cleanup</div>
-      </span>
-    </a>
+<svg style="display:none" aria-hidden="true">
+<symbol id="i-coffee" viewBox="0 0 24 24"><path d="M10 2v2" /><path d="M14 2v2" /><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" /><path d="M6 2v2" /></symbol>
+<symbol id="i-dog" viewBox="0 0 24 24"><path d="M11.25 16.25h1.5L12 17z" /><path d="M16 14v.5" /><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309" /><path d="M8 14v.5" /><path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5" /></symbol>
+<symbol id="i-soup" viewBox="0 0 24 24"><path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z" /><path d="M7 21h10" /><path d="M19.5 12 22 6" /><path d="M16.25 3c.27.1.8.53.75 1.36-.06.83-.93 1.2-1 2.02-.05.78.34 1.24.73 1.62" /><path d="M11.25 3c.27.1.8.53.74 1.36-.05.83-.93 1.2-.98 2.02-.06.78.33 1.24.72 1.62" /><path d="M6.25 3c.27.1.8.53.75 1.36-.06.83-.93 1.2-1 2.02-.05.78.34 1.24.74 1.62" /></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></symbol>
+<symbol id="i-washing-machine" viewBox="0 0 24 24"><path d="M3 6h3" /><path d="M17 6h.01" /><rect width="18" height="20" x="3" y="2" rx="2" /><circle cx="12" cy="13" r="5" /><path d="M12 18a2.5 2.5 0 0 0 0-5 2.5 2.5 0 0 1 0-5" /></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></symbol>
+<symbol id="i-shirt" viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" /></symbol>
+<symbol id="i-calendar-days" viewBox="0 0 24 24"><path d="M8 2v4" /><path d="M16 2v4" /><rect width="18" height="18" x="3" y="4" rx="2" /><path d="M3 10h18" /><path d="M8 14h.01" /><path d="M12 14h.01" /><path d="M16 14h.01" /><path d="M8 18h.01" /><path d="M12 18h.01" /><path d="M16 18h.01" /></symbol>
+</svg>
+<div class="sheet">
+  <div class="roomnav">
+    <span class="active">⏰ Daily Schedule</span>
+    <a href="how-to-clean.html">🧹 How to Clean</a>
   </div>
-  <footer>For Leni &middot; tap any card to open that room's guide</footer>
+
+  <div class="roomhead">
+    <h1><svg class="si"><use href="#i-sparkles"/></svg> Daily Schedule</h1>
+  </div>
+  <div class="metaline">📅 Monday&ndash;Saturday &middot; 7:00 AM&ndash;7:00 PM &middot; 🐕 dog walks 20 min each &middot; 🧹 about 5h 45m of cleaning time a day</div>
+
+  <div id="now-card" class="nowcard" style="background:#5f9a5f;"></div>
+  <div id="today-card" class="todaycard"></div>
+
+  <div class="sectiontitle-sm">📋 Extra Tasks from Faith</div>
+  <!-- To add a task: copy the example below, fill in real dates (YYYY-MM-DD) and content.
+       It disappears on its own the day after data-end. Leave data-end off for something with no end date. -->
+  <!--
+  <div class="extraitem" data-start="2026-07-21" data-end="2026-07-28">
+    <div class="extratitle">While Faith is traveling</div>
+    <div class="extradates">Jul 21 &ndash; Jul 28</div>
+    <ul>
+      <li>Example task one</li>
+      <li>Example task two</li>
+    </ul>
+  </div>
+  -->
+  <div id="extra-tasks"></div>
+
+  <div class="sectiontitle"><svg class="si"><use href="#i-sparkles"/></svg> Today, Hour by Hour</div>
+  <div class="timeline" id="timeline"></div>
+
+  <details class="detailsbox">
+    <summary>See the full week (Monday&ndash;Saturday rota)</summary>
+    <div class="sectionsub">Every day's cleaning block also covers that day's rotating task below, on top of each room's own daily list. Sunday is Leni's day off.</div>
+    <div id="week-grid"></div>
+  </details>
+
+  <details class="detailsbox">
+    <summary>See the once-a-month rotation (4-week cycle)</summary>
+    <div class="sectionsub">The deeper, occasional tasks from each room's guide, spread across 4 Saturdays so the whole list cycles roughly every month instead of piling up on one day.</div>
+    <div class="monthgrid" id="month-grid"></div>
+  </details>
+
+  <footer>Daily Schedule, v7</footer>
 </div>
+
+<script>
+(function() {
+  function tm(h, m) { return h * 60 + m; }
+  function fmt(mins) {
+    var h = Math.floor(mins / 60), m = mins % 60;
+    var ap = h >= 12 ? 'PM' : 'AM';
+    var h12 = h % 12; if (h12 === 0) h12 = 12;
+    return h12 + (m ? ':' + (m < 10 ? '0' : '') + m : ':00') + ' ' + ap;
+  }
+
+  var TIMELINE = [
+    { start: tm(7,0),  end: tm(7,10),  task: 'Make coffee', icon: 'coffee', cls: '' },
+    { start: tm(7,10), end: tm(7,30),  task: 'Walk the dog (1st walk)', sub: '20 minutes', icon: 'dog', cls: 'walk' },
+    { start: tm(7,30), end: tm(8,0),   task: 'Prepare breakfast', sub: 'Simple & quick', icon: 'soup', cls: 'meal' },
+    { start: tm(8,0),  end: tm(8,15),  task: 'Start a load of laundry', icon: 'washing-machine', cls: 'laundry' },
+    { start: tm(8,15), end: tm(10,50), task: 'House cleaning', sub: "See each room's guide for the full checklist", icon: 'sparkles', cls: 'clean' },
+    { start: tm(10,50),end: tm(11,10), task: 'Walk the dog (2nd walk)', sub: '20 minutes', icon: 'dog', cls: 'walk' },
+    { start: tm(11,15),end: tm(12,0),  task: 'Prepare lunch', sub: '45 minutes, properly cooked', icon: 'soup', cls: 'meal' },
+    { start: tm(12,0), end: tm(13,0),  task: 'Lunch', sub: "Everyone eats together, Leni included, this is her lunch hour. Time may shift some days, Faith will let her know.", icon: 'heart', cls: 'break' },
+    { start: tm(13,0), end: tm(13,30), task: 'Lunch cleanup', icon: 'soup', cls: 'meal' },
+    { start: tm(13,30),end: tm(16,40), task: 'Continue cleaning', sub: "Today's rotating task, see below, plus laundry follow-up", icon: 'sparkles', cls: 'clean' },
+    { start: tm(16,40),end: tm(17,0),  task: 'Walk the dog (3rd walk)', sub: '20 minutes', icon: 'dog', cls: 'walk' },
+    { start: tm(17,0), end: tm(18,0),  task: 'Prepare dinner', sub: '60 minutes, timed to be ready right at 6:00 PM', icon: 'soup', cls: 'meal' },
+    { start: tm(18,0), end: tm(18,30), task: 'Dinner, served at 6:00 PM sharp', icon: 'soup', cls: 'meal' },
+    { start: tm(18,30),end: tm(19,0),  task: 'Dinner cleanup', icon: 'soup', cls: 'meal' },
+    { start: tm(19,0), end: tm(19,0),  task: 'Leni leaves for the day', icon: 'heart', cls: '' }
+  ];
+
+  var WEEKDAY_TASKS = {
+    1: { name: 'Monday', html: 'Change bed sheets &amp; duvet covers, all 3 bedrooms &middot; Fresh towels &amp; bath mat &middot; Ironing <span class="tag">1 of 2</span>' },
+    2: { name: 'Tuesday', html: 'Bathroom: deep-clean toilet brush &amp; holder, clean the drains' },
+    3: { name: 'Wednesday', html: 'Kitchen: deep-clean the fridge' },
+    4: { name: 'Thursday', html: 'Fresh towels &amp; bath mat &middot; Ironing <span class="tag">2 of 2</span>' },
+    5: { name: 'Friday', html: 'Living/Dining: check sofa covers, deep-dust shelves, wipe the piano, vacuum under &amp; behind the sofa, lift &amp; vacuum under the rug' },
+    6: { name: 'Saturday', html: 'Rotate through the "Once In A While" tasks, see this month\'s rotation below', monthly: true },
+    0: { name: 'Sunday', off: true }
+  };
+
+  var MONTH_CYCLE = [
+    ['Bathroom: clear out &amp; wipe under-sink and mirror cabinet shelves', 'Kitchen: clean the range hood filter', 'Living/Dining: full floor reset'],
+    ['Bedroom: dust top of wardrobe &amp; high, unreachable areas', 'Kitchen: deep-clean the rice cooker', 'Living/Dining: rotate &amp; flip sofa cushions'],
+    ['Bedroom: under the bed', 'Kitchen: descale the water dispenser (only if the light is on)', 'Living/Dining: dust the piano legs, pedals &amp; bench'],
+    ['Bedroom: clean the air purifier', 'Catch-up: anything skipped the last 3 weeks']
+  ];
+
+  function getISOWeek(d) {
+    var date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    var dayNum = (date.getUTCDay() + 6) % 7;
+    date.setUTCDate(date.getUTCDate() - dayNum + 3);
+    var firstThursday = new Date(Date.UTC(date.getUTCFullYear(), 0, 4));
+    var diff = (date - firstThursday) / 86400000 - 3 + ((firstThursday.getUTCDay() + 6) % 7);
+    return 1 + Math.round(diff / 7);
+  }
+
+  var now = new Date();
+  var nowMin = now.getHours() * 60 + now.getMinutes();
+  var dow = now.getDay();
+  var cycleWeek = ((getISOWeek(now) - 1) % 4) + 1;
+
+  // ---- Render timeline + find now/next ----
+  var tlEl = document.getElementById('timeline');
+  var currentIdx = -1, nextIdx = -1;
+  for (var i = 0; i < TIMELINE.length; i++) {
+    var b = TIMELINE[i];
+    if (nowMin >= b.start && nowMin < b.end) currentIdx = i;
+    if (currentIdx === -1 && nowMin < b.start && nextIdx === -1) nextIdx = i;
+  }
+  if (currentIdx !== -1 && currentIdx + 1 < TIMELINE.length) nextIdx = currentIdx + 1;
+
+  TIMELINE.forEach(function(b, i) {
+    var row = document.createElement('div');
+    row.className = 'row ' + b.cls + (i === currentIdx ? ' now' : '');
+    var timeLabel = b.start === b.end ? fmt(b.start) : (fmt(b.start) + ' – ' + fmt(b.end));
+    row.innerHTML =
+      '<div class="dot ' + b.cls + '"><svg class="si"><use href="#i-' + b.icon + '"/></svg></div>' +
+      '<div class="info">' +
+        '<div class="time">' + timeLabel + (i === currentIdx ? '<span class="nowbadge">NOW</span>' : '') + '</div>' +
+        '<div class="task">' + b.task + '</div>' +
+        (b.sub ? '<div class="sub">' + b.sub + '</div>' : '') +
+      '</div>';
+    tlEl.appendChild(row);
+  });
+
+  // ---- Now / Next card ----
+  var nowCardEl = document.getElementById('now-card');
+  var dayOff = WEEKDAY_TASKS[dow] && WEEKDAY_TASKS[dow].off;
+  if (dayOff) {
+    nowCardEl.style.background = '#7a5c8a';
+    nowCardEl.innerHTML = '<div class="label">Today</div><div class="task">It\'s Sunday, Leni\'s day off! 🎉</div>';
+  } else if (nowMin < TIMELINE[0].start) {
+    nowCardEl.innerHTML = '<div class="label">Not started yet</div><div class="task">First up: ' + TIMELINE[0].task + '</div><div class="sub">Starts at ' + fmt(TIMELINE[0].start) + '</div>';
+  } else if (nowMin >= TIMELINE[TIMELINE.length - 1].end) {
+    nowCardEl.style.background = '#7a5c8a';
+    nowCardEl.innerHTML = '<div class="label">Day is done</div><div class="task">See you tomorrow!</div>';
+  } else if (currentIdx !== -1) {
+    var cur = TIMELINE[currentIdx];
+    var colorMap = { walk: '#4a6f94', meal: '#b9975a', clean: '#5f9a5f', laundry: '#7a5c8a', break: '#2c8577', '': '#A8311E' };
+    nowCardEl.style.background = colorMap[cur.cls] || '#A8311E';
+    var html = '<div class="label">Right Now</div><div class="task">' + cur.task + '</div><div class="sub">Until ' + fmt(cur.end) + '</div>';
+    if (nextIdx !== -1) {
+      html += '<div class="next">Up next: ' + TIMELINE[nextIdx].task + ' at ' + fmt(TIMELINE[nextIdx].start) + '</div>';
+    }
+    nowCardEl.innerHTML = html;
+  }
+
+  // ---- Today's Focus card ----
+  var todayEl = document.getElementById('today-card');
+  var wt = WEEKDAY_TASKS[dow];
+  if (wt.off) {
+    todayEl.innerHTML = '<div class="label">Today is Sunday</div><div class="task">Day off, no tasks today</div>';
+  } else {
+    var html2 = '<div class="label">Today is ' + wt.name + '</div><div class="task">' + wt.html + '</div>';
+    if (wt.monthly) {
+      html2 += '<div class="sub" style="margin-top:8px;">This month\'s rotation, week ' + cycleWeek + ' of 4:</div><ul>';
+      MONTH_CYCLE[cycleWeek - 1].forEach(function(t) { html2 += '<li>' + t + '</li>'; });
+      html2 += '</ul>';
+    }
+    todayEl.innerHTML = html2;
+  }
+
+  // ---- Week grid ----
+  var weekEl = document.getElementById('week-grid');
+  var order = [1,2,3,4,5,6,0];
+  order.forEach(function(d) {
+    var t = WEEKDAY_TASKS[d];
+    var card = document.createElement('div');
+    if (t.off) {
+      card.className = 'dayoff' + (d === dow ? '' : '');
+      card.innerHTML = '<div class="daylabel">' + t.name + '</div><div class="daytasks">Day off</div>';
+    } else {
+      card.className = 'daycard' + (d === dow ? ' today' : '');
+      card.innerHTML = '<div class="daylabel">' + t.name + '</div><div class="daytasks">' + t.html + '</div>';
+    }
+    weekEl.appendChild(card);
+  });
+
+  // ---- Month grid ----
+  var monthEl = document.getElementById('month-grid');
+  MONTH_CYCLE.forEach(function(tasks, idx) {
+    var card = document.createElement('div');
+    card.className = 'monthcard' + (idx + 1 === cycleWeek ? ' current' : '');
+    var ul = '<ul>' + tasks.map(function(t) { return '<li>' + t + '</li>'; }).join('') + '</ul>';
+    card.innerHTML = '<div class="weeklabel">Week ' + (idx + 1) + (idx + 1 === cycleWeek ? ' (this week)' : '') + '</div>' + ul;
+    monthEl.appendChild(card);
+  });
+
+  // ---- Extra tasks: hide expired items ----
+  var todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+  document.querySelectorAll('.extraitem').forEach(function(item) {
+    var end = item.getAttribute('data-end');
+    if (end && todayStr > end) item.classList.add('expired');
+  });
+  var extraContainer = document.getElementById('extra-tasks');
+  var visibleCount = Array.prototype.filter.call(extraContainer.children, function(c) { return !c.classList.contains('expired'); }).length;
+  if (visibleCount === 0) {
+    var empty = document.createElement('div');
+    empty.className = 'extraempty';
+    empty.textContent = 'Nothing extra right now.';
+    extraContainer.appendChild(empty);
+  }
+
+  // ---- Force <details> open when printing, restore after ----
+  var openState = [];
+  window.addEventListener('beforeprint', function() {
+    document.querySelectorAll('details.detailsbox').forEach(function(d, i) {
+      openState[i] = d.open;
+      d.open = true;
+    });
+  });
+  window.addEventListener('afterprint', function() {
+    document.querySelectorAll('details.detailsbox').forEach(function(d, i) {
+      d.open = openState[i];
+    });
+  });
+})();
+</script>
 </body>
 </html>
