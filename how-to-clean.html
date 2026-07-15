@@ -4,88 +4,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Household Cleaning Guides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --bg-0: #F4F1EC; --bg-1: #FAFAF7; --bg-2: #EDE7DF; --bg-3: #E4DDD5;
+    --fg-0: #1A1A1A; --fg-1: #3D3D3D; --fg-2: #6B6B6B; --fg-3: #ABABAB;
+    --accent: #C8392B;
+    --font-serif: 'Source Serif 4', Georgia, serif;
+    --font-ui: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    --shadow-card: 0 1px 4px rgba(0,0,0,0.07), 0 0 1px rgba(0,0,0,0.04);
+  }
   * { box-sizing: border-box; }
-  body {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    color: #1a1a1a;
-    background: #ffffff;
-    margin: 0;
-    padding: 32px 20px;
+  html { -webkit-text-size-adjust: 100%; }
+  body { font-family: var(--font-ui); color: var(--fg-0); background: var(--bg-0); margin: 0; padding: 0 0 48px 0; -webkit-font-smoothing: antialiased; }
+  .sheet { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+  .roomnav { display: flex; gap: 8px; flex-wrap: wrap; padding: 20px 0 0 0; }
+  .roomnav a, .roomnav span {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    padding: 9px 16px; border-radius: 20px; text-decoration: none;
+    border: 1.5px solid var(--bg-3); color: var(--fg-1);
   }
-  .wrap { max-width: 520px; margin: 0 auto; }
-  h1 {
-    font-size: 28px;
-    margin: 0 0 6px 0;
-    letter-spacing: 0.3px;
-  }
-  .subtitle {
-    font-size: 14px;
-    color: #888;
-    margin: 0 0 28px 0;
-  }
-  .cards {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+  .roomnav a:hover { border-color: var(--accent); color: var(--accent); }
+  .roomnav .active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .masthead { padding: 24px 0 20px 0; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .eyebrow::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  h1 { font-family: var(--font-serif); font-weight: 600; font-size: 32px; margin: 0; letter-spacing: -0.01em; }
+  .subtitle { font-family: var(--font-ui); font-size: 14px; color: var(--fg-2); margin: 10px 0 0 0; }
+
+  .cards { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
   a.card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 18px 18px;
-    border: 1.5px solid #e4ded2;
-    border-radius: 12px;
-    text-decoration: none;
-    color: #1a1a1a;
+    display: flex; align-items: center; gap: 16px;
+    background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-card);
+    padding: 18px 20px; text-decoration: none; color: var(--fg-0);
     transition: border-color 0.15s ease;
   }
-  a.card:hover { border-color: #A8311E; }
-  a.card .emoji { font-size: 30px; flex-shrink: 0; }
-  a.card .label { font-size: 18px; font-weight: 700; }
-  a.card .sub { font-size: 13px; color: #888; margin-top: 2px; }
-  footer {
-    margin-top: 32px;
-    font-size: 12px;
-    color: #aaa;
-    text-align: center;
-  }
+  a.card:hover { border-color: var(--accent); }
+  a.card .emoji { font-size: 28px; flex-shrink: 0; }
+  a.card .label { font-family: var(--font-serif); font-weight: 600; font-size: 18px; color: var(--fg-0); }
+  a.card .sub { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); margin-top: 3px; }
 
-  .roomnav {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-  .roomnav a, .roomnav span {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 13px;
-    font-weight: 700;
-    padding: 9px 16px;
-    border-radius: 20px;
-    text-decoration: none;
-    border: 1.5px solid #d8d2c4;
-    color: #6b5a45;
-  }
-  .roomnav a:hover { border-color: #A8311E; color: #A8311E; }
-  .roomnav .active {
-    background: #A8311E;
-    border-color: #A8311E;
-    color: #fff;
-  }
+  footer { margin-top: 40px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
+
+  @media (max-width: 480px) { .sheet { padding: 0 18px; } h1 { font-size: 27px; } }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="sheet">
   <div class="roomnav">
     <a href="index.html">⏰ Daily Schedule</a>
     <span class="active">🧹 How to Clean</span>
     <a href="restocking.html">📦 Restocking List</a>
   </div>
-  <h1>🏠 Household Cleaning Guides</h1>
-  <p class="subtitle">Tap a room to open its guide</p>
+
+  <div class="masthead">
+    <div class="eyebrow">For Leni</div>
+    <h1>🏠 Household Cleaning Guides</h1>
+    <p class="subtitle">Tap a room to open its guide</p>
+  </div>
+
   <div class="cards">
     <a class="card" href="Bathroom.html">
       <span class="emoji">🚿</span>
@@ -116,7 +99,8 @@
       </span>
     </a>
   </div>
-  <footer>For Leni &middot; tap any card to open that room's guide</footer>
+
+  <footer>How to Clean, v2</footer>
 </div>
 </body>
 </html>
