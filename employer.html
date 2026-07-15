@@ -52,13 +52,12 @@
 
   .tilegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
   .tile { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-card); padding: 16px 18px; }
-  .tile.job { grid-column: span 2; background: var(--jade-muted); }
   .tile .ttask { font-family: var(--font-serif); font-weight: 600; font-size: 16px; color: var(--fg-0); margin: 2px 0 3px 0; }
   .tile .tsub { font-family: var(--font-ui); font-size: 12.5px; color: var(--fg-2); }
-  .statuspill { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-ui); font-size: 13px; font-weight: 600; margin-top: 10px; }
-  .statuspill.done { color: var(--jade); }
-  .statuspill.pending { color: var(--fg-3); }
-  @media (max-width: 480px) { .tilegrid { grid-template-columns: 1fr; } .tile.job { grid-column: span 1; } }
+  @media (max-width: 480px) { .tilegrid { grid-template-columns: 1fr; } }
+
+  .extraflag { display: flex; align-items: flex-start; gap: 8px; margin-top: 6px; font-family: var(--font-ui); font-size: 12.5px; color: var(--jade); line-height: 1.5; }
+  .extraflag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--jade); flex-shrink: 0; margin-top: 6px; }
 
   .edibar { display: flex; align-items: baseline; gap: 10px; border-top: 6px solid var(--fg-0); padding-top: 12px; margin: 34px 0 16px 0; }
   .edibar .num { font-family: var(--font-serif); font-style: italic; font-size: 15px; color: var(--accent); }
@@ -139,7 +138,7 @@
     { id: 'lunch-prep',    start: tm(11,15),end: tm(12,0),  task: 'Prepare lunch', emoji: '🍲' },
     { id: 'lunch',         start: tm(12,0), end: tm(13,0),  task: 'Lunch', emoji: '🍽️' },
     { id: 'lunch-cleanup', start: tm(13,0), end: tm(13,30), task: 'Lunch cleanup', emoji: '🧽' },
-    { id: 'clean-pm',      start: tm(13,30),end: tm(16,40), task: 'Continue cleaning', emoji: '✨' },
+    { id: 'clean-pm',      start: tm(13,30),end: tm(16,40), task: 'Continue cleaning', emoji: '✨', extraJobHere: true },
     { id: 'walk3',         start: tm(16,40),end: tm(17,0),  task: 'Walk the dog, third walk', emoji: '🐕' },
     { id: 'dinner-prep',   start: tm(17,0), end: tm(18,0),  task: 'Prepare dinner', emoji: '🍲' },
     { id: 'dinner',        start: tm(18,0), end: tm(18,30), task: 'Dinner', emoji: '🍽️' },
@@ -189,12 +188,6 @@
     } else {
       grid.innerHTML = '';
     }
-    if (!wt.off) {
-      var focusDone = checks['focus'] === true;
-      grid.innerHTML += '<div class="tile job"><div class="eyebrow jade sm">⭐ ' + wt.name + "'s Extra Job</div><div class=\"ttask\">" + wt.html + '</div>' +
-        '<div class="statuspill ' + (focusDone ? 'done' : 'pending') + '">' + (focusDone ? '✅ Done' : '⏳ Not done yet') + '</div></div>';
-    }
-
     var tlEl = document.getElementById('timeline');
     tlEl.innerHTML = '';
     TIMELINE.forEach(function(b, i) {
@@ -203,10 +196,11 @@
       var row = document.createElement('div');
       row.className = 'trow' + (done ? ' done' : '');
       var timeLabel = isPointEvent ? fmt(b.start) : (fmt(b.start) + ' to ' + fmt(b.end));
+      var extraHtml = (b.extraJobHere && !wt.off) ? ('<div class="extraflag"><span class="dot"></span><span>Also today: ' + wt.html + '</span></div>') : '';
       row.innerHTML =
         '<div class="tstatus">' + (isPointEvent ? '' : (done ? '✓' : '')) + '</div>' +
         '<span class="temoji">' + b.emoji + '</span>' +
-        '<div class="tinfo"><div class="ttime">' + timeLabel + '</div><div class="ttask">' + b.task + '</div></div>';
+        '<div class="tinfo"><div class="ttime">' + timeLabel + '</div><div class="ttask">' + b.task + '</div>' + extraHtml + '</div>';
       tlEl.appendChild(row);
     });
   }
