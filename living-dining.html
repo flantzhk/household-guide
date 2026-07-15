@@ -42,6 +42,7 @@
     border-bottom: 1px solid #e4ded2;
   }
   .task:last-child { border-bottom: none; }
+  .task:target { background: #fdf3e3; border-radius: 10px; padding-left: 10px; padding-right: 10px; scroll-margin-top: 16px; }
 
   .photopair {
     display: flex;
@@ -520,7 +521,7 @@
 
   <div class="sectionhead weekly"><svg class="si"><use href="#i-calendar"/></svg> Weekly <span class="tag">once a week</span></div>
 
-  <div class="task">
+  <div class="task" id="task-sofacovers">
     <div class="photopair">
       <div class="prodimg-box">📷 Photo once<br>purchased</div>
     </div>
@@ -545,7 +546,7 @@
     </div>
   </div>
 
-  <div class="task">
+  <div class="task" id="task-shelves">
     <div class="info">
       <h3>Deep-dust the shelves</h3>
       <ol class="steps">
@@ -557,7 +558,7 @@
     </div>
   </div>
 
-  <div class="task">
+  <div class="task" id="task-piano">
     <div class="info">
       <h3>Piano: wipe the outside, if marked</h3>
       <ol class="steps">
@@ -575,7 +576,7 @@
     </div>
   </div>
 
-  <div class="task" style="border-bottom:none;">
+  <div class="task" style="border-bottom:none;" id="task-vacuumsofa">
     <div class="info">
       <h3>Vacuum under &amp; behind the sofa, lift the rug</h3>
       <ol class="steps">
@@ -588,7 +589,7 @@
 
   <div class="sectionhead monthly"><svg class="si"><use href="#i-calendar"/></svg> Once In A While <span class="tag">rotate through these</span></div>
 
-  <div class="task">
+  <div class="task" id="task-floorreset">
     <div class="info">
       <h3>Full floor reset</h3>
       <ol class="steps">
@@ -599,7 +600,7 @@
     </div>
   </div>
 
-  <div class="task">
+  <div class="task" id="task-cushions">
     <div class="info">
       <h3>Rotate &amp; flip sofa cushions</h3>
       <ol class="steps">
@@ -608,7 +609,7 @@
     </div>
   </div>
 
-  <div class="task" style="border-bottom:none;">
+  <div class="task" style="border-bottom:none;" id="task-pianolegs">
     <div class="info">
       <h3>Dust the piano legs, pedals &amp; bench</h3>
       <ol class="steps">

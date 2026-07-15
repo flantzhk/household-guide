@@ -247,6 +247,63 @@
   .monthcard .weeklabel { font-size: 12px; font-weight: 800; color: #7a5c8a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
   .monthcard ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.5; }
 
+  /* Links to full step-by-step pages */
+  .tasklink {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #A8311E;
+    text-decoration: none;
+    margin: 6px 10px 0 0;
+    white-space: nowrap;
+  }
+  .tasklink:hover { text-decoration: underline; }
+  .linkrow { margin-top: 6px; }
+
+  /* Checkboxes / done state */
+  .checkline {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 10px;
+  }
+  .checkline input[type="checkbox"] {
+    width: 19px;
+    height: 19px;
+    accent-color: #A8311E;
+    flex-shrink: 0;
+    margin-top: 1px;
+    cursor: pointer;
+  }
+  .checkline label { font-size: 14px; font-weight: 700; cursor: pointer; }
+  .row .rowcheck {
+    width: 20px;
+    height: 20px;
+    accent-color: #A8311E;
+    flex-shrink: 0;
+    margin-top: 8px;
+    cursor: pointer;
+  }
+  .row.done { opacity: 0.45; }
+  .row.done .task { text-decoration: line-through; }
+  .extraitem .checkline label { color: #6b4f1e; }
+  .extraitem.done { opacity: 0.5; }
+  .extraitem.done .extratitle { text-decoration: line-through; }
+
+  .priorityband {
+    font-size: 13px;
+    color: #6b5a45;
+    background: #fdf3e3;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 8px 0 12px 0;
+    line-height: 1.5;
+  }
+
+  .breakdown { font-size: 12.5px; color: #999; margin-top: 2px; }
+
   @media (max-width: 640px) {
     body { padding: 16px; }
     h1 { font-size: 26px; }
@@ -291,12 +348,15 @@
   <div class="roomhead">
     <h1><svg class="si"><use href="#i-sparkles"/></svg> Daily Schedule</h1>
   </div>
-  <div class="metaline">📅 Monday&ndash;Saturday &middot; 7:00 AM&ndash;7:00 PM &middot; 🐕 dog walks 20 min each &middot; 🧹 about 5h 45m of cleaning time a day</div>
+  <div class="metaline">📅 Monday&ndash;Saturday &middot; 7:00 AM&ndash;7:00 PM &middot; 🐕 dog walks 20 min each
+    <div class="breakdown">🧹 Cleaning time: 5h 45m/day total &middot; 2h 35m in the morning (8:15&ndash;10:50 AM) + 3h 10m in the afternoon (1:30&ndash;4:40 PM)</div>
+  </div>
 
   <div id="now-card" class="nowcard" style="background:#5f9a5f;"></div>
   <div id="today-card" class="todaycard"></div>
 
   <div class="sectiontitle-sm">📋 Extra Tasks from Faith</div>
+  <div class="priorityband">⭐ Anything Faith adds here comes first, before the regular schedule above. This is also where she'll ask for shopping trips or other errands, not just special one-off jobs.</div>
   <!-- To add a task: copy the example below, fill in real dates (YYYY-MM-DD) and content.
        It disappears on its own the day after data-end. Leave data-end off for something with no end date. -->
   <!--
@@ -326,7 +386,7 @@
     <div class="monthgrid" id="month-grid"></div>
   </details>
 
-  <footer>Daily Schedule, v7</footer>
+  <footer>Daily Schedule, v8</footer>
 </div>
 
 <script>
@@ -358,21 +418,40 @@
   ];
 
   var WEEKDAY_TASKS = {
-    1: { name: 'Monday', html: 'Change bed sheets &amp; duvet covers, all 3 bedrooms &middot; Fresh towels &amp; bath mat &middot; Ironing <span class="tag">1 of 2</span>' },
-    2: { name: 'Tuesday', html: 'Bathroom: deep-clean toilet brush &amp; holder, clean the drains' },
-    3: { name: 'Wednesday', html: 'Kitchen: deep-clean the fridge' },
-    4: { name: 'Thursday', html: 'Fresh towels &amp; bath mat &middot; Ironing <span class="tag">2 of 2</span>' },
-    5: { name: 'Friday', html: 'Living/Dining: check sofa covers, deep-dust shelves, wipe the piano, vacuum under &amp; behind the sofa, lift &amp; vacuum under the rug' },
+    1: { name: 'Monday', html: 'Change bed sheets &amp; duvet covers, all 3 bedrooms &middot; Fresh towels &amp; bath mat &middot; Ironing <span class="tag">1 of 2</span>',
+         links: [{ label: 'Bedroom sheets', url: 'Bedroom.html#task-sheets' }, { label: 'Bathroom towels', url: 'Bathroom.html#task-towels' }] },
+    2: { name: 'Tuesday', html: 'Bathroom: deep-clean toilet brush &amp; holder, clean the drains',
+         links: [{ label: 'Toilet brush & holder', url: 'Bathroom.html#task-toiletbrush' }, { label: 'Drains', url: 'Bathroom.html#task-drains' }] },
+    3: { name: 'Wednesday', html: 'Kitchen: deep-clean the fridge',
+         links: [{ label: 'Fridge deep-clean', url: 'Kitchen.html#task-fridge' }] },
+    4: { name: 'Thursday', html: 'Fresh towels &amp; bath mat &middot; Ironing <span class="tag">2 of 2</span>',
+         links: [{ label: 'Bathroom towels', url: 'Bathroom.html#task-towels' }] },
+    5: { name: 'Friday', html: 'Living/Dining: check sofa covers, deep-dust shelves, wipe the piano, vacuum under &amp; behind the sofa, lift &amp; vacuum under the rug',
+         links: [{ label: 'Sofa covers', url: 'living-dining.html#task-sofacovers' }, { label: 'Shelves', url: 'living-dining.html#task-shelves' }, { label: 'Piano', url: 'living-dining.html#task-piano' }, { label: 'Vacuum sofa & rug', url: 'living-dining.html#task-vacuumsofa' }] },
     6: { name: 'Saturday', html: 'Rotate through the "Once In A While" tasks, see this month\'s rotation below', monthly: true },
     0: { name: 'Sunday', off: true }
   };
 
   var MONTH_CYCLE = [
-    ['Bathroom: clear out &amp; wipe under-sink and mirror cabinet shelves', 'Kitchen: clean the range hood filter', 'Living/Dining: full floor reset'],
-    ['Bedroom: dust top of wardrobe &amp; high, unreachable areas', 'Kitchen: deep-clean the rice cooker', 'Living/Dining: rotate &amp; flip sofa cushions'],
-    ['Bedroom: under the bed', 'Kitchen: descale the water dispenser (only if the light is on)', 'Living/Dining: dust the piano legs, pedals &amp; bench'],
-    ['Bedroom: clean the air purifier', 'Catch-up: anything skipped the last 3 weeks']
+    [{ t: 'Bathroom: clear out &amp; wipe under-sink and mirror cabinet shelves', url: 'Bathroom.html#task-cabinet' },
+     { t: 'Kitchen: clean the range hood filter', url: 'Kitchen.html#task-rangehood' },
+     { t: 'Living/Dining: full floor reset', url: 'living-dining.html#task-floorreset' }],
+    [{ t: 'Bedroom: dust top of wardrobe &amp; high, unreachable areas', url: 'Bedroom.html#task-wardrobetop' },
+     { t: 'Kitchen: deep-clean the rice cooker', url: 'Kitchen.html#task-ricecooker' },
+     { t: 'Living/Dining: rotate &amp; flip sofa cushions', url: 'living-dining.html#task-cushions' }],
+    [{ t: 'Bedroom: under the bed', url: 'Bedroom.html#task-underbed' },
+     { t: 'Kitchen: descale the water dispenser (only if the light is on)', url: 'Kitchen.html#task-waterdispenser' },
+     { t: 'Living/Dining: dust the piano legs, pedals &amp; bench', url: 'living-dining.html#task-pianolegs' }],
+    [{ t: 'Bedroom: clean the air purifier', url: 'Bedroom.html#task-airpurifier' },
+     { t: 'Catch-up: anything skipped the last 3 weeks', url: null }]
   ];
+
+  function linkRow(links) {
+    if (!links || !links.length) return '';
+    return '<div class="linkrow">' + links.map(function(l) {
+      return '<a class="tasklink" href="' + l.url + '">See the steps: ' + l.label + ' &rarr;</a>';
+    }).join('') + '</div>';
+  }
 
   function getISOWeek(d) {
     var date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -387,6 +466,15 @@
   var nowMin = now.getHours() * 60 + now.getMinutes();
   var dow = now.getDay();
   var cycleWeek = ((getISOWeek(now) - 1) % 4) + 1;
+  var todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+
+  // ---- localStorage check helper (per-day keys reset automatically on a new date) ----
+  function isChecked(key) {
+    try { return localStorage.getItem(key) === '1'; } catch (e) { return false; }
+  }
+  function setChecked(key, val) {
+    try { localStorage.setItem(key, val ? '1' : '0'); } catch (e) {}
+  }
 
   // ---- Render timeline + find now/next ----
   var tlEl = document.getElementById('timeline');
@@ -399,16 +487,27 @@
   if (currentIdx !== -1 && currentIdx + 1 < TIMELINE.length) nextIdx = currentIdx + 1;
 
   TIMELINE.forEach(function(b, i) {
+    var isPointEvent = (b.start === b.end); // e.g. "Leni leaves for the day", no duration, no checkbox needed
     var row = document.createElement('div');
-    row.className = 'row ' + b.cls + (i === currentIdx ? ' now' : '');
-    var timeLabel = b.start === b.end ? fmt(b.start) : (fmt(b.start) + ' – ' + fmt(b.end));
+    var checkKey = 'hh_row_' + todayStr + '_' + i;
+    var done = !isPointEvent && isChecked(checkKey);
+    row.className = 'row ' + b.cls + (i === currentIdx ? ' now' : '') + (done ? ' done' : '');
+    var timeLabel = isPointEvent ? fmt(b.start) : (fmt(b.start) + ' – ' + fmt(b.end));
     row.innerHTML =
+      (isPointEvent ? '' : '<input type="checkbox" class="rowcheck" ' + (done ? 'checked' : '') + '>') +
       '<div class="dot ' + b.cls + '"><svg class="si"><use href="#i-' + b.icon + '"/></svg></div>' +
       '<div class="info">' +
         '<div class="time">' + timeLabel + (i === currentIdx ? '<span class="nowbadge">NOW</span>' : '') + '</div>' +
         '<div class="task">' + b.task + '</div>' +
         (b.sub ? '<div class="sub">' + b.sub + '</div>' : '') +
       '</div>';
+    if (!isPointEvent) {
+      var cb = row.querySelector('.rowcheck');
+      cb.addEventListener('change', function() {
+        setChecked(checkKey, cb.checked);
+        row.classList.toggle('done', cb.checked);
+      });
+    }
     tlEl.appendChild(row);
   });
 
@@ -440,13 +539,24 @@
   if (wt.off) {
     todayEl.innerHTML = '<div class="label">Today is Sunday</div><div class="task">Day off, no tasks today</div>';
   } else {
+    var focusKey = 'hh_focus_' + todayStr;
+    var focusDone = isChecked(focusKey);
     var html2 = '<div class="label">Today is ' + wt.name + '</div><div class="task">' + wt.html + '</div>';
+    var focusLinks = wt.links || [];
     if (wt.monthly) {
       html2 += '<div class="sub" style="margin-top:8px;">This month\'s rotation, week ' + cycleWeek + ' of 4:</div><ul>';
-      MONTH_CYCLE[cycleWeek - 1].forEach(function(t) { html2 += '<li>' + t + '</li>'; });
+      MONTH_CYCLE[cycleWeek - 1].forEach(function(t) {
+        html2 += '<li>' + t.t + '</li>';
+        if (t.url) focusLinks.push({ label: t.t.replace(/&amp;/g, '&').split(':')[0], url: t.url });
+      });
       html2 += '</ul>';
     }
+    html2 += linkRow(focusLinks);
+    html2 += '<div class="checkline"><input type="checkbox" id="focus-check" ' + (focusDone ? 'checked' : '') + '><label for="focus-check">Done for today</label></div>';
     todayEl.innerHTML = html2;
+    document.getElementById('focus-check').addEventListener('change', function(e) {
+      setChecked(focusKey, e.target.checked);
+    });
   }
 
   // ---- Week grid ----
@@ -460,7 +570,7 @@
       card.innerHTML = '<div class="daylabel">' + t.name + '</div><div class="daytasks">Day off</div>';
     } else {
       card.className = 'daycard' + (d === dow ? ' today' : '');
-      card.innerHTML = '<div class="daylabel">' + t.name + '</div><div class="daytasks">' + t.html + '</div>';
+      card.innerHTML = '<div class="daylabel">' + t.name + '</div><div class="daytasks">' + t.html + linkRow(t.links) + '</div>';
     }
     weekEl.appendChild(card);
   });
@@ -470,16 +580,29 @@
   MONTH_CYCLE.forEach(function(tasks, idx) {
     var card = document.createElement('div');
     card.className = 'monthcard' + (idx + 1 === cycleWeek ? ' current' : '');
-    var ul = '<ul>' + tasks.map(function(t) { return '<li>' + t + '</li>'; }).join('') + '</ul>';
+    var ul = '<ul>' + tasks.map(function(t) {
+      return '<li>' + t.t + (t.url ? ' <a class="tasklink" style="margin:0;" href="' + t.url + '">&rarr;</a>' : '') + '</li>';
+    }).join('') + '</ul>';
     card.innerHTML = '<div class="weeklabel">Week ' + (idx + 1) + (idx + 1 === cycleWeek ? ' (this week)' : '') + '</div>' + ul;
     monthEl.appendChild(card);
   });
 
-  // ---- Extra tasks: hide expired items ----
-  var todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
-  document.querySelectorAll('.extraitem').forEach(function(item) {
+  // ---- Extra tasks: checkboxes (persist until unchecked/expired) + hide expired items ----
+  document.querySelectorAll('.extraitem').forEach(function(item, idx) {
     var end = item.getAttribute('data-end');
-    if (end && todayStr > end) item.classList.add('expired');
+    if (end && todayStr > end) { item.classList.add('expired'); return; }
+    var start = item.getAttribute('data-start') || '';
+    var extraKey = 'hh_extra_' + (start + '_' + end + '_' + idx);
+    var done = isChecked(extraKey);
+    if (done) item.classList.add('done');
+    var checkDiv = document.createElement('div');
+    checkDiv.className = 'checkline';
+    checkDiv.innerHTML = '<input type="checkbox" id="extra-check-' + idx + '" ' + (done ? 'checked' : '') + '><label for="extra-check-' + idx + '">Done</label>';
+    item.appendChild(checkDiv);
+    checkDiv.querySelector('input').addEventListener('change', function(e) {
+      setChecked(extraKey, e.target.checked);
+      item.classList.toggle('done', e.target.checked);
+    });
   });
   var extraContainer = document.getElementById('extra-tasks');
   var visibleCount = Array.prototype.filter.call(extraContainer.children, function(c) { return !c.classList.contains('expired'); }).length;

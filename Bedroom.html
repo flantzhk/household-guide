@@ -42,6 +42,7 @@
     border-bottom: 1px solid #e4ded2;
   }
   .task:last-child { border-bottom: none; }
+  .task:target { background: #fdf3e3; border-radius: 10px; padding-left: 10px; padding-right: 10px; scroll-margin-top: 16px; }
 
   .photopair {
     display: flex;
@@ -541,7 +542,7 @@
 
   <div class="sectionhead weekly"><svg class="si"><use href="#i-calendar"/></svg> Weekly <span class="tag">once a week</span></div>
 
-  <div class="task" style="border-bottom:none;">
+  <div class="task" style="border-bottom:none;" id="task-sheets">
     <div class="info">
       <h3>Change bed sheets &amp; duvet cover</h3>
       <ol class="steps">
@@ -568,7 +569,7 @@
 
   <div class="sectionhead monthly"><svg class="si"><use href="#i-calendar"/></svg> Once In A While <span class="tag">rotate through these</span></div>
 
-  <div class="task">
+  <div class="task" id="task-wardrobetop">
     <div class="info">
       <h3>Dust top of wardrobe &amp; high, unreachable areas</h3>
       <ol class="steps">
@@ -577,7 +578,7 @@
     </div>
   </div>
 
-  <div class="task">
+  <div class="task" id="task-underbed">
     <div class="info">
       <h3>Under the bed</h3>
       <ol class="steps">
@@ -587,7 +588,7 @@
     </div>
   </div>
 
-  <div class="task" style="border-bottom:none;">
+  <div class="task" style="border-bottom:none;" id="task-airpurifier">
     <div class="info">
       <h3>Clean the air purifier</h3>
       <ol class="steps">
