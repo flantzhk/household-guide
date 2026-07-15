@@ -63,9 +63,10 @@
   .tile .tsub { font-family: var(--font-ui); font-size: 12.5px; color: var(--fg-2); }
   @media (max-width: 480px) { .tilegrid { grid-template-columns: 1fr; } .tile.now, .tile.streak { grid-column: span 1; } }
 
-  .extraflag { display: flex; align-items: flex-start; gap: 8px; margin-top: 8px; font-family: var(--font-ui); font-size: 13px; color: var(--jade); line-height: 1.5; }
+  .extraflag { margin-top: 8px; font-family: var(--font-ui); font-size: 13px; color: var(--jade); line-height: 1.5; }
+  .extraflagrow { display: flex; align-items: flex-start; gap: 8px; }
   .extraflag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--jade); flex-shrink: 0; margin-top: 7px; }
-  .extraflag .linkrow { margin-top: 4px; }
+  .extraflag .linkrow { margin-top: 8px; margin-left: 13px; }
 
   .edibar { display: flex; align-items: baseline; gap: 10px; border-top: 6px solid var(--fg-0); padding-top: 12px; margin: 34px 0 16px 0; }
   .edibar .num { font-family: var(--font-serif); font-style: italic; font-size: 15px; color: var(--accent); }
@@ -94,8 +95,14 @@
   .cooklink { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-ui); font-size: 12.5px; font-weight: 600; color: var(--streak); text-decoration: none; margin-top: 6px; }
   .cooklink:hover { text-decoration: underline; }
   .linkrow { margin-top: 6px; }
-  .tasklink { display: inline-flex; align-items: center; gap: 3px; font-family: var(--font-ui); font-size: 12.5px; font-weight: 600; color: var(--accent); text-decoration: none; margin: 4px 10px 0 0; }
-  .tasklink:hover { text-decoration: underline; }
+  .tasklink {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--font-ui); font-size: 12.5px; font-weight: 700;
+    color: #fff; background: var(--accent);
+    padding: 7px 14px; border-radius: 20px;
+    text-decoration: none; margin: 6px 8px 0 0;
+  }
+  .tasklink:hover { background: #A82E22; }
 
   details.detailsbox { margin-top: 24px; border-top: 1px solid var(--bg-3); padding-top: 4px; }
   details.detailsbox summary { cursor: pointer; padding: 14px 0; font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
@@ -317,7 +324,7 @@
       row.className = 'trow' + (i === currentIdx ? ' now' : '') + (done ? ' done' : '');
       var timeLabel = isPointEvent ? fmt(b.start) : (fmt(b.start) + ' to ' + fmt(b.end));
       var cookHtml = (b.cook && !isPointEvent) ? '<a class="cooklink" href="' + MEAL_PLANNER + '" target="_blank" rel="noopener">🍽️ See the recipe in Meal Planner</a>' : '';
-      var extraHtml = (b.extraJobHere && !wt.off) ? ('<div class="extraflag"><span class="dot"></span><span>Also today: ' + wt.html + '</span>' + linkRow(wt.links) + '</div>') : '';
+      var extraHtml = (b.extraJobHere && !wt.off) ? ('<div class="extraflag"><div class="extraflagrow"><span class="dot"></span><span>Also today: ' + wt.html + '</span></div>' + linkRow(wt.links) + '</div>') : '';
       row.innerHTML =
         (isPointEvent ? '' : '<input type="checkbox" class="rowcheck" data-id="' + b.id + '" ' + (done ? 'checked' : '') + '>') +
         '<span class="temoji">' + b.emoji + '</span>' +
@@ -374,7 +381,7 @@
       var card = document.createElement('div');
       card.className = 'monthcard' + (idx + 1 === cycleWeek ? ' current' : '');
       var ul = '<ul>' + tasks.map(function(t) {
-        return '<li>' + t.t + (t.url ? ' <a class="tasklink" style="margin:0;" href="' + t.url + '">&rarr;</a>' : '') + '</li>';
+        return '<li>' + t.t + (t.url ? ' <a class="tasklink" style="margin:0;padding:3px 9px;" href="' + t.url + '">&rarr;</a>' : '') + '</li>';
       }).join('') + '</ul>';
       card.innerHTML = '<div class="weeklabel">Week ' + (idx + 1) + (idx + 1 === cycleWeek ? ' (this week)' : '') + '</div>' + ul;
       monthEl.appendChild(card);
