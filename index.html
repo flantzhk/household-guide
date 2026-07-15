@@ -56,17 +56,16 @@
   .tilegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
   .tile { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-card); padding: 18px 20px; }
   .tile.now { grid-column: span 2; box-shadow: var(--shadow-raised); }
-  .tile.job { grid-column: span 2; background: var(--jade-muted); }
   .tile.streak { grid-column: span 2; background: var(--streak-soft); border-color: rgba(217,123,32,0.3); display: none; }
   .tile .ttask { font-family: var(--font-serif); font-weight: 600; color: var(--fg-0); line-height: 1.25; margin: 2px 0 3px 0; }
   .tile.now .ttask { font-size: 24px; }
   .tile:not(.now) .ttask { font-size: 17px; }
   .tile .tsub { font-family: var(--font-ui); font-size: 12.5px; color: var(--fg-2); }
-  @media (max-width: 480px) { .tilegrid { grid-template-columns: 1fr; } .tile.now, .tile.job, .tile.streak { grid-column: span 1; } }
+  @media (max-width: 480px) { .tilegrid { grid-template-columns: 1fr; } .tile.now, .tile.streak { grid-column: span 1; } }
 
-  .checkrow { display: flex; align-items: center; gap: 9px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.08); }
-  .checkrow input[type="checkbox"] { width: 19px; height: 19px; accent-color: var(--jade); cursor: pointer; flex-shrink: 0; }
-  .checkrow label { font-family: var(--font-ui); font-size: 13.5px; font-weight: 500; color: var(--fg-1); cursor: pointer; }
+  .extraflag { display: flex; align-items: flex-start; gap: 8px; margin-top: 8px; font-family: var(--font-ui); font-size: 13px; color: var(--jade); line-height: 1.5; }
+  .extraflag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--jade); flex-shrink: 0; margin-top: 7px; }
+  .extraflag .linkrow { margin-top: 4px; }
 
   .edibar { display: flex; align-items: baseline; gap: 10px; border-top: 6px solid var(--fg-0); padding-top: 12px; margin: 34px 0 16px 0; }
   .edibar .num { font-family: var(--font-serif); font-style: italic; font-size: 15px; color: var(--accent); }
@@ -178,7 +177,7 @@
     <div class="monthgrid" id="month-grid"></div>
   </details>
 
-  <footer>Daily Schedule for Leni · v10</footer>
+  <footer>Daily Schedule for Leni · v11</footer>
 </div>
 
 <script>
@@ -204,7 +203,7 @@
     { id: 'lunch-prep',    start: tm(11,15),end: tm(12,0),  task: 'Prepare lunch', sub: '45 minutes, properly cooked', emoji: '🍲', cook: true },
     { id: 'lunch',         start: tm(12,0), end: tm(13,0),  task: 'Lunch', sub: 'We eat together. This is your lunch break too 💛 The time might change some days, I\'ll let you know.', emoji: '🍽️' },
     { id: 'lunch-cleanup', start: tm(13,0), end: tm(13,30), task: 'Lunch cleanup', emoji: '🧽' },
-    { id: 'clean-pm',      start: tm(13,30),end: tm(16,40), task: 'Continue cleaning', sub: "Today's rotating task, see below, plus laundry follow-up", emoji: '✨' },
+    { id: 'clean-pm',      start: tm(13,30),end: tm(16,40), task: 'Continue cleaning', sub: 'Plus laundry follow-up', emoji: '✨', extraJobHere: true },
     { id: 'walk3',         start: tm(16,40),end: tm(17,0),  task: 'Walk the dog', sub: 'Third walk, 20 minutes', emoji: '🐕' },
     { id: 'dinner-prep',   start: tm(17,0), end: tm(18,0),  task: 'Prepare dinner', sub: '60 minutes, timed to be ready right at 6:00 PM', emoji: '🍲', cook: true },
     { id: 'dinner',        start: tm(18,0), end: tm(18,30), task: 'Dinner', sub: 'Served at 6:00 PM sharp', emoji: '🍽️' },
@@ -303,18 +302,9 @@
     if (nextIdx !== -1) {
       tiles += '<div class="tile"><div class="eyebrow sm ink">Up Next</div><div class="ttask">' + TIMELINE[nextIdx].emoji + ' ' + TIMELINE[nextIdx].task + '</div><div class="tsub">' + fmt(TIMELINE[nextIdx].start) + '</div></div>';
     }
-    var focusDone = checks['focus'] === true;
-    tiles += '<div class="tile job"><div class="eyebrow sm jade">⭐ ' + wt.name + "'s Extra Job</div><div class=\"ttask\">" + wt.html + '</div><div class="tsub">This is on top of your usual day 💪</div>' +
-      linkRow(wt.links) +
-      '<div class="checkrow"><input type="checkbox" id="focus-check" ' + (focusDone ? 'checked' : '') + '><label for="focus-check">Done for today</label></div></div>';
     tiles += '<div class="tile streak" id="streak-tile"><div class="eyebrow sm streak">🐾 Weekly, Not Tracked</div><div class="ttask">Cook a batch of dog food this week</div><div class="tsub">No box to check, just get it done when you can 😊</div></div>';
     grid.innerHTML = tiles;
     if (dow === 6) document.getElementById('streak-tile').style.display = 'block';
-
-    var focusCheckEl = document.getElementById('focus-check');
-    if (focusCheckEl) {
-      focusCheckEl.addEventListener('change', function(e) { saveCheck('focus', e.target.checked); });
-    }
   }
 
   function renderTimeline() {
@@ -327,6 +317,7 @@
       row.className = 'trow' + (i === currentIdx ? ' now' : '') + (done ? ' done' : '');
       var timeLabel = isPointEvent ? fmt(b.start) : (fmt(b.start) + ' to ' + fmt(b.end));
       var cookHtml = (b.cook && !isPointEvent) ? '<a class="cooklink" href="' + MEAL_PLANNER + '" target="_blank" rel="noopener">🍽️ See the recipe in Meal Planner</a>' : '';
+      var extraHtml = (b.extraJobHere && !wt.off) ? ('<div class="extraflag"><span class="dot"></span><span>Also today: ' + wt.html + '</span>' + linkRow(wt.links) + '</div>') : '';
       row.innerHTML =
         (isPointEvent ? '' : '<input type="checkbox" class="rowcheck" data-id="' + b.id + '" ' + (done ? 'checked' : '') + '>') +
         '<span class="temoji">' + b.emoji + '</span>' +
@@ -335,6 +326,7 @@
           '<div class="ttask">' + b.task + '</div>' +
           (b.sub ? '<div class="tsub">' + b.sub + '</div>' : '') +
           cookHtml +
+          extraHtml +
         '</div>';
       tlEl.appendChild(row);
       if (!isPointEvent) {
