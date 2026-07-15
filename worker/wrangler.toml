@@ -1,0 +1,14 @@
+name = "household-help-api"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# KV namespace for daily checkbox state.
+# Create it with:
+#   wrangler kv namespace create HOUSEHOLD_DATA
+# Then paste the returned id below.
+[[kv_namespaces]]
+binding = "HOUSEHOLD_DATA"
+id = "30b14bcec3cd4774bad23910e8fb9ef7"
+
+[vars]
+ALLOWED_ORIGIN = "https://flantzhk.github.io"

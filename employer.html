@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today's Progress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-0: #F4F1EC; --bg-1: #FAFAF7; --bg-2: #EDE7DF; --bg-3: #E4DDD5;
+    --fg-0: #1A1A1A; --fg-1: #3D3D3D; --fg-2: #6B6B6B; --fg-3: #ABABAB;
+    --accent: #C8392B; --accent-dark: #F2DDD9; --accent-muted: rgba(200,57,43,0.08);
+    --jade: #3F8F73; --jade-soft: #D8E8E0; --jade-muted: rgba(63,143,115,0.08);
+    --streak: #D97B20; --streak-soft: rgba(217,123,32,0.14);
+    --gold: #C9A24A; --gold-soft: rgba(201,162,74,0.15);
+    --font-serif: 'Source Serif 4', Georgia, serif;
+    --font-ui: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    --shadow-card: 0 1px 4px rgba(0,0,0,0.07), 0 0 1px rgba(0,0,0,0.04);
+    --shadow-raised: 0 4px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { font-family: var(--font-ui); color: var(--fg-0); background: var(--bg-0); margin: 0; padding: 0 0 64px 0; -webkit-font-smoothing: antialiased; }
+  .sheet { max-width: 680px; margin: 0 auto; padding: 0 24px; }
+
+  .privatebar { background: var(--fg-0); color: var(--bg-0); font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; padding: 9px; }
+
+  .masthead { padding: 24px 0 18px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--streak); display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .eyebrow::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--streak); flex-shrink: 0; }
+  .eyebrow.jade { color: var(--jade); } .eyebrow.jade::before { background: var(--jade); }
+  .eyebrow.ink { color: var(--fg-2); } .eyebrow.ink::before { background: var(--fg-2); }
+  .eyebrow.sm { font-size: 10px; margin-bottom: 8px; }
+
+  h1 { font-family: var(--font-serif); font-weight: 600; font-size: 30px; margin: 0; letter-spacing: -0.01em; }
+  .metaline { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); margin: 8px 0 0 0; }
+  .refreshbtn {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 600; color: var(--fg-0);
+    background: var(--bg-1); border: 1.5px solid var(--bg-3); padding: 10px 18px; cursor: pointer; flex-shrink: 0;
+  }
+  .refreshbtn:hover { border-color: var(--accent); color: var(--accent); }
+  .refreshbtn:active { transform: translateY(1px); }
+
+  .progresscard { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-raised); padding: 20px 22px; margin-top: 16px; }
+  .progresscard .ptask { font-family: var(--font-serif); font-weight: 600; font-size: 24px; color: var(--fg-0); }
+  .progressbar { height: 8px; background: var(--bg-3); margin-top: 12px; overflow: hidden; }
+  .progressbar .fill { height: 100%; background: var(--jade); transition: width 0.3s ease; }
+  .progresscard .pcount { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); margin-top: 8px; }
+
+  .tilegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .tile { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-card); padding: 16px 18px; }
+  .tile.job { grid-column: span 2; background: var(--jade-muted); }
+  .tile .ttask { font-family: var(--font-serif); font-weight: 600; font-size: 16px; color: var(--fg-0); margin: 2px 0 3px 0; }
+  .tile .tsub { font-family: var(--font-ui); font-size: 12.5px; color: var(--fg-2); }
+  .statuspill { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-ui); font-size: 13px; font-weight: 600; margin-top: 10px; }
+  .statuspill.done { color: var(--jade); }
+  .statuspill.pending { color: var(--fg-3); }
+  @media (max-width: 480px) { .tilegrid { grid-template-columns: 1fr; } .tile.job { grid-column: span 1; } }
+
+  .edibar { display: flex; align-items: baseline; gap: 10px; border-top: 6px solid var(--fg-0); padding-top: 12px; margin: 34px 0 16px 0; }
+  .edibar .num { font-family: var(--font-serif); font-style: italic; font-size: 15px; color: var(--accent); }
+  .edibar .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--fg-0); }
+
+  .trow { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--bg-3); }
+  .trow.done { background: var(--jade-muted); margin: 0 -16px; padding-left: 16px; padding-right: 16px; border-bottom-color: transparent; }
+  .tstatus { width: 22px; height: 22px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; border: 1.5px solid var(--bg-3); color: transparent; }
+  .trow.done .tstatus { background: var(--jade); border-color: var(--jade); color: #fff; }
+  .temoji { font-size: 20px; line-height: 1; flex-shrink: 0; width: 24px; text-align: center; margin-top: 1px; }
+  .tinfo { flex: 1; min-width: 0; }
+  .ttime { font-family: var(--font-ui); font-size: 12.5px; font-weight: 500; color: var(--fg-2); }
+  .ttask { font-family: var(--font-ui); font-size: 15.5px; font-weight: 600; color: var(--fg-0); margin-top: 1px; }
+  .trow.done .ttask { color: var(--jade); }
+
+  .extraitem { background: var(--bg-1); border: 1px solid var(--bg-3); border-left: 4px solid var(--gold); padding: 12px 16px; margin-bottom: 8px; }
+  .extraitem .extratitle { font-family: var(--font-serif); font-weight: 600; font-size: 15px; color: var(--fg-0); }
+  #extra-tasks-section { display: none; }
+
+  footer { margin-top: 40px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
+  .backlink { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); text-decoration: none; }
+  .backlink:hover { color: var(--accent); }
+
+  @media (max-width: 480px) { .sheet { padding: 0 18px; } h1 { font-size: 24px; } }
+</style>
+</head>
+<body>
+<div class="privatebar">Employer view, not linked from Leni's pages, bookmark this one for yourself</div>
+<div class="sheet">
+  <div class="masthead">
+    <div>
+      <div class="eyebrow">Employer View</div>
+      <h1>Today's Progress</h1>
+      <div class="metaline">What Leni has checked off so far today.</div>
+    </div>
+    <button class="refreshbtn" id="refresh-btn">🔄 Refresh</button>
+  </div>
+
+  <div class="progresscard">
+    <div class="eyebrow ink sm">Right Now</div>
+    <div class="ptask" id="progress-task">Loading…</div>
+    <div class="progressbar"><div class="fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="pcount" id="progress-count">Loading today's progress…</div>
+  </div>
+
+  <div class="tilegrid" id="tile-grid"></div>
+
+  <div id="extra-tasks-section">
+    <div class="edibar"><span class="num">01</span><span class="label">Extra Tasks From Faith</span></div>
+    <div id="extra-tasks"></div>
+  </div>
+
+  <div class="edibar"><span class="num">02</span><span class="label">Today, Hour by Hour</span></div>
+  <div id="timeline"></div>
+
+  <footer><a class="backlink" href="index.html">&larr; Leni's page</a> &middot; Today's Progress, Employer View</footer>
+</div>
+
+<script>
+(function() {
+  var API = 'https://household-help-api.faith-lantz-ee8.workers.dev';
+
+  function tm(h, m) { return h * 60 + m; }
+  function fmt(mins) {
+    var h = Math.floor(mins / 60), m = mins % 60;
+    var ap = h >= 12 ? 'PM' : 'AM';
+    var h12 = h % 12; if (h12 === 0) h12 = 12;
+    return h12 + (m ? ':' + (m < 10 ? '0' : '') + m : ':00') + ' ' + ap;
+  }
+
+  var TIMELINE = [
+    { id: 'coffee',        start: tm(7,0),  end: tm(7,10),  task: 'Make coffee', emoji: '☕' },
+    { id: 'walk1',         start: tm(7,10), end: tm(7,30),  task: 'Walk the dog, first walk', emoji: '🐕' },
+    { id: 'breakfast',     start: tm(7,30), end: tm(8,0),   task: 'Prepare breakfast', emoji: '🍳' },
+    { id: 'laundry',       start: tm(8,0),  end: tm(8,15),  task: 'Start a load of laundry', emoji: '🧺' },
+    { id: 'clean-am',      start: tm(8,15), end: tm(10,50), task: 'House cleaning', emoji: '✨' },
+    { id: 'walk2',         start: tm(10,50),end: tm(11,10), task: 'Walk the dog, second walk', emoji: '🐕' },
+    { id: 'lunch-prep',    start: tm(11,15),end: tm(12,0),  task: 'Prepare lunch', emoji: '🍲' },
+    { id: 'lunch',         start: tm(12,0), end: tm(13,0),  task: 'Lunch', emoji: '🍽️' },
+    { id: 'lunch-cleanup', start: tm(13,0), end: tm(13,30), task: 'Lunch cleanup', emoji: '🧽' },
+    { id: 'clean-pm',      start: tm(13,30),end: tm(16,40), task: 'Continue cleaning', emoji: '✨' },
+    { id: 'walk3',         start: tm(16,40),end: tm(17,0),  task: 'Walk the dog, third walk', emoji: '🐕' },
+    { id: 'dinner-prep',   start: tm(17,0), end: tm(18,0),  task: 'Prepare dinner', emoji: '🍲' },
+    { id: 'dinner',        start: tm(18,0), end: tm(18,30), task: 'Dinner', emoji: '🍽️' },
+    { id: 'dinner-cleanup',start: tm(18,30),end: tm(19,0),  task: 'Dinner cleanup', emoji: '🧽' },
+    { start: tm(19,0), end: tm(19,0), task: 'Go home', emoji: '🚪' }
+  ];
+
+  var WEEKDAY_TASKS = {
+    1: { name: 'Monday', html: "Change bed sheets, fresh towels, ironing" },
+    2: { name: 'Tuesday', html: "Bathroom: deep-clean toilet brush and drains" },
+    3: { name: 'Wednesday', html: "Kitchen: deep-clean the fridge" },
+    4: { name: 'Thursday', html: "Fresh towels, bath mat, ironing" },
+    5: { name: 'Friday', html: "Living/Dining: shelves, piano, sofa, rug" },
+    6: { name: 'Saturday', html: "Rotate through the monthly deep-clean list" },
+    0: { name: 'Sunday', off: true }
+  };
+
+  var now = new Date();
+  var nowMin = now.getHours() * 60 + now.getMinutes();
+  var dow = now.getDay();
+  var wt = WEEKDAY_TASKS[dow];
+  var todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+
+  var currentIdx = -1, nextIdx = -1;
+  for (var i = 0; i < TIMELINE.length; i++) {
+    var b = TIMELINE[i];
+    if (nowMin >= b.start && nowMin < b.end) currentIdx = i;
+    if (currentIdx === -1 && nowMin < b.start && nextIdx === -1) nextIdx = i;
+  }
+  if (currentIdx !== -1 && currentIdx + 1 < TIMELINE.length) nextIdx = currentIdx + 1;
+
+  var checkable = TIMELINE.filter(function(b) { return b.id; });
+
+  function render(checks) {
+    checks = checks || {};
+
+    document.getElementById('progress-task').textContent = wt.off
+      ? "It's Sunday, Leni's day off"
+      : (currentIdx !== -1 ? TIMELINE[currentIdx].emoji + ' ' + TIMELINE[currentIdx].task : 'Outside working hours');
+    var doneCount = checkable.filter(function(b) { return checks[b.id] === true; }).length;
+    document.getElementById('progress-fill').style.width = (checkable.length ? (doneCount / checkable.length * 100) : 0) + '%';
+    document.getElementById('progress-count').textContent = doneCount + ' of ' + checkable.length + ' tasks done so far today';
+
+    var grid = document.getElementById('tile-grid');
+    if (nextIdx !== -1 && !wt.off) {
+      grid.innerHTML = '<div class="tile"><div class="eyebrow ink sm">Up Next</div><div class="ttask">' + TIMELINE[nextIdx].emoji + ' ' + TIMELINE[nextIdx].task + '</div><div class="tsub">' + fmt(TIMELINE[nextIdx].start) + '</div></div>';
+    } else {
+      grid.innerHTML = '';
+    }
+    if (!wt.off) {
+      var focusDone = checks['focus'] === true;
+      grid.innerHTML += '<div class="tile job"><div class="eyebrow jade sm">⭐ ' + wt.name + "'s Extra Job</div><div class=\"ttask\">" + wt.html + '</div>' +
+        '<div class="statuspill ' + (focusDone ? 'done' : 'pending') + '">' + (focusDone ? '✅ Done' : '⏳ Not done yet') + '</div></div>';
+    }
+
+    var tlEl = document.getElementById('timeline');
+    tlEl.innerHTML = '';
+    TIMELINE.forEach(function(b, i) {
+      var isPointEvent = !b.id;
+      var done = !isPointEvent && checks[b.id] === true;
+      var row = document.createElement('div');
+      row.className = 'trow' + (done ? ' done' : '');
+      var timeLabel = isPointEvent ? fmt(b.start) : (fmt(b.start) + ' to ' + fmt(b.end));
+      row.innerHTML =
+        '<div class="tstatus">' + (isPointEvent ? '' : (done ? '✓' : '')) + '</div>' +
+        '<span class="temoji">' + b.emoji + '</span>' +
+        '<div class="tinfo"><div class="ttime">' + timeLabel + '</div><div class="ttask">' + b.task + '</div></div>';
+      tlEl.appendChild(row);
+    });
+  }
+
+  function load() {
+    document.getElementById('progress-count').textContent = 'Loading…';
+    fetch(API + '/checks/' + todayStr)
+      .then(function(r) { return r.json(); })
+      .then(function(checks) { render(checks); })
+      .catch(function() { render({}); document.getElementById('progress-count').textContent = "Could not load Leni's progress right now, try refreshing."; });
+  }
+
+  document.getElementById('refresh-btn').addEventListener('click', load);
+  load();
+})();
+</script>
+</body>
+</html>
