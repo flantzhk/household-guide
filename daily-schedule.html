@@ -109,6 +109,7 @@
   .dot.meal { border-color: #b9975a; }
   .dot.clean { border-color: #5f9a5f; }
   .dot.laundry { border-color: #7a5c8a; }
+  .dot.break { border-color: #2c8577; }
   .dot .si {
     width: 24px;
     height: 24px;
@@ -119,6 +120,7 @@
   .dot.meal .si { stroke: #b9975a; }
   .dot.clean .si { stroke: #5f9a5f; }
   .dot.laundry .si { stroke: #7a5c8a; }
+  .dot.break .si { stroke: #2c8577; }
 
   .info { flex: 1; padding-top: 6px; }
   .time { font-size: 13.5px; font-weight: 800; color: #A8311E; letter-spacing: 0.3px; }
@@ -126,6 +128,7 @@
   .row.meal .time { color: #b9975a; }
   .row.clean .time { color: #5f9a5f; }
   .row.laundry .time { color: #7a5c8a; }
+  .row.break .time { color: #2c8577; }
   .task { font-size: 17px; font-weight: 700; margin-top: 2px; }
   .sub { font-size: 13px; color: #777; margin-top: 2px; }
 
@@ -166,6 +169,7 @@
 <symbol id="i-soup" viewBox="0 0 24 24"><path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z" /><path d="M7 21h10" /><path d="M19.5 12 22 6" /><path d="M16.25 3c.27.1.8.53.75 1.36-.06.83-.93 1.2-1 2.02-.05.78.34 1.24.73 1.62" /><path d="M11.25 3c.27.1.8.53.74 1.36-.05.83-.93 1.2-.98 2.02-.06.78.33 1.24.72 1.62" /><path d="M6.25 3c.27.1.8.53.75 1.36-.06.83-.93 1.2-1 2.02-.05.78.34 1.24.74 1.62" /></symbol>
 <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></symbol>
 <symbol id="i-washing-machine" viewBox="0 0 24 24"><path d="M3 6h3" /><path d="M17 6h.01" /><rect width="18" height="20" x="3" y="2" rx="2" /><circle cx="12" cy="13" r="5" /><path d="M12 18a2.5 2.5 0 0 0 0-5 2.5 2.5 0 0 1 0-5" /></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></symbol>
 </svg>
 <div class="sheet">
   <div class="roomnav">
@@ -192,14 +196,15 @@
     <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">11:45 AM &ndash; 12:00 PM</div><div class="task">Prepare lunch</div></div></div>
     <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">12:00 PM</div><div class="task">Lunch ready</div></div></div>
     <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">12:30 &ndash; 1:00 PM</div><div class="task">Lunch cleanup</div></div></div>
-    <div class="row clean"><div class="dot clean"><svg class="si"><use href="#i-sparkles"/></svg></div><div class="info"><div class="time">1:00 &ndash; 4:00 PM</div><div class="task">Continue cleaning</div><div class="sub">Laundry follow-up, or rotate through the "once in a while" tasks</div></div></div>
+    <div class="row break"><div class="dot break"><svg class="si"><use href="#i-heart"/></svg></div><div class="info"><div class="time">1:00 &ndash; 2:00 PM</div><div class="task">Leni's lunch break</div><div class="sub">Her own hour to eat and rest</div></div></div>
+    <div class="row clean"><div class="dot clean"><svg class="si"><use href="#i-sparkles"/></svg></div><div class="info"><div class="time">2:00 &ndash; 4:00 PM</div><div class="task">Continue cleaning</div><div class="sub">Laundry follow-up, or rotate through the "once in a while" tasks</div></div></div>
     <div class="row walk"><div class="dot walk"><svg class="si"><use href="#i-dog"/></svg></div><div class="info"><div class="time">4:00 PM</div><div class="task">Walk the dog (3rd walk)</div></div></div>
     <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">5:00 &ndash; 6:00 PM</div><div class="task">Prepare dinner</div></div></div>
     <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">6:00 PM</div><div class="task">Dinner ready</div></div></div>
     <div class="row meal"><div class="dot meal"><svg class="si"><use href="#i-soup"/></svg></div><div class="info"><div class="time">6:30 PM</div><div class="task">Dinner cleanup</div></div></div>
   </div>
 
-  <footer>Daily Schedule, v1</footer>
+  <footer>Daily Schedule, v2</footer>
 </div>
 </body>
 </html>
