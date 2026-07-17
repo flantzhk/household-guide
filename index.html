@@ -120,6 +120,10 @@
   .monthcard.current { border-color: var(--accent); border-width: 2px; background: var(--accent-dark); }
   .monthcard .weeklabel { font-family: var(--font-mono); font-size: 0.65625rem; font-weight: 600; color: var(--jade); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
   .monthcard ul { margin: 0; padding-left: 18px; font-family: var(--font-ui); font-size: 0.8125rem; line-height: 1.55; color: var(--fg-1); }
+  .monthtask { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; }
+  .monthtask.done .mtext { opacity: 0.55; text-decoration: line-through; }
+  .monthcheck { width: 17px; height: 17px; accent-color: var(--jade); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+  .mtext { font-family: var(--font-ui); font-size: 0.8125rem; line-height: 1.55; color: var(--fg-1); flex: 1; }
   @media (max-width: 480px) { .monthgrid { grid-template-columns: 1fr; } }
 
   footer { margin-top: 40px; font-family: var(--font-mono); font-size: 0.65625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
@@ -187,7 +191,7 @@
     <div class="monthgrid" id="month-grid"></div>
   </details>
 
-  <footer>Daily Schedule for Leni · v11</footer>
+  <footer>Daily Schedule for Leni · v12</footer>
 </div>
 
 <script>
@@ -237,16 +241,16 @@
   };
 
   var MONTH_CYCLE = [
-    [{ t: 'Bathroom: clear out &amp; wipe under-sink and mirror cabinet shelves', url: 'Bathroom.html#task-cabinet' },
-     { t: 'Kitchen: clean the range hood filter', url: 'Kitchen.html#task-rangehood' },
-     { t: 'Living/Dining: full floor reset', url: 'living-dining.html#task-floorreset' }],
-    [{ t: 'Bedroom: dust top of wardrobe &amp; high, unreachable areas', url: 'Bedroom.html#task-wardrobetop' },
-     { t: 'Kitchen: deep-clean the rice cooker', url: 'Kitchen.html#task-ricecooker' },
-     { t: 'Living/Dining: rotate &amp; flip sofa cushions', url: 'living-dining.html#task-cushions' }],
-    [{ t: 'Bedroom: under the bed', url: 'Bedroom.html#task-underbed' },
-     { t: 'Kitchen: descale the water dispenser (only if the light is on)', url: 'Kitchen.html#task-waterdispenser' },
-     { t: 'Living/Dining: dust the piano legs, pedals &amp; bench', url: 'living-dining.html#task-pianolegs' }],
-    [{ t: 'Bedroom: clean the air purifier', url: 'Bedroom.html#task-airpurifier' },
+    [{ id: 'cabinet', t: 'Bathroom: clear out &amp; wipe under-sink and mirror cabinet shelves', url: 'Bathroom.html#task-cabinet' },
+     { id: 'rangehood', t: 'Kitchen: clean the range hood filter', url: 'Kitchen.html#task-rangehood' },
+     { id: 'floorreset', t: 'Living/Dining: full floor reset', url: 'living-dining.html#task-floorreset' }],
+    [{ id: 'wardrobetop', t: 'Bedroom: dust top of wardrobe &amp; high, unreachable areas', url: 'Bedroom.html#task-wardrobetop' },
+     { id: 'ricecooker', t: 'Kitchen: deep-clean the rice cooker', url: 'Kitchen.html#task-ricecooker' },
+     { id: 'cushions', t: 'Living/Dining: rotate &amp; flip sofa cushions', url: 'living-dining.html#task-cushions' }],
+    [{ id: 'underbed', t: 'Bedroom: under the bed', url: 'Bedroom.html#task-underbed' },
+     { id: 'waterdispenser', t: 'Kitchen: descale the water dispenser (only if the light is on)', url: 'Kitchen.html#task-waterdispenser' },
+     { id: 'pianolegs', t: 'Living/Dining: dust the piano legs, pedals &amp; bench', url: 'living-dining.html#task-pianolegs' }],
+    [{ id: 'airpurifier', t: 'Bedroom: clean the air purifier', url: 'Bedroom.html#task-airpurifier' },
      { t: 'Catch-up: anything skipped the last 3 weeks', url: null }]
   ];
 
@@ -291,6 +295,20 @@
     fetch(API + '/checks/' + todayStr, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: id, checked: value })
+    }).catch(function() {});
+  }
+
+  // ---- Once-in-a-while tasks: these don't reset daily, they remember the last time each was done ----
+  var periodic = {};
+  function loadPeriodic() {
+    return fetch(API + '/periodic').then(function(r) { return r.json(); }).then(function(d) { periodic = d || {}; }).catch(function() { periodic = {}; });
+  }
+  function savePeriodic(id, done) {
+    periodic[id] = periodic[id] || { lastDone: null, history: [] };
+    periodic[id].lastDone = done ? todayStr : periodic[id].lastDone;
+    fetch(API + '/periodic/' + id, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ done: done, date: todayStr })
     }).catch(function() {});
   }
 
@@ -381,16 +399,47 @@
     });
   }
 
+  var PERIODIC_FRESH_DAYS = 30;
+  function isPeriodicDone(id) {
+    var task = periodic[id];
+    if (!task || !task.lastDone) return false;
+    var last = new Date(task.lastDone + 'T00:00:00');
+    var daysSince = Math.floor((now - last) / 86400000);
+    return daysSince < PERIODIC_FRESH_DAYS;
+  }
+
   function renderMonthGrid() {
     var monthEl = document.getElementById('month-grid');
+    monthEl.innerHTML = '';
     MONTH_CYCLE.forEach(function(tasks, idx) {
       var card = document.createElement('div');
       card.className = 'monthcard' + (idx + 1 === cycleWeek ? ' current' : '');
-      var ul = '<ul>' + tasks.map(function(t) {
-        return '<li>' + t.t + (t.url ? ' <a class="tasklink" style="margin:0;padding:3px 9px;" href="' + t.url + '">&rarr;</a>' : '') + '</li>';
-      }).join('') + '</ul>';
-      card.innerHTML = '<div class="weeklabel">Week ' + (idx + 1) + (idx + 1 === cycleWeek ? ' (this week)' : '') + '</div>' + ul;
+      var ul = document.createElement('ul');
+      ul.style.listStyle = 'none';
+      ul.style.paddingLeft = '0';
+      tasks.forEach(function(t) {
+        var li = document.createElement('li');
+        var done = t.id ? isPeriodicDone(t.id) : false;
+        var linkHtml = t.url ? ' <a class="tasklink" style="margin:0;padding:3px 9px;" href="' + t.url + '">&rarr;</a>' : '';
+        if (t.id) {
+          li.className = 'monthtask' + (done ? ' done' : '');
+          li.innerHTML = '<input type="checkbox" class="monthcheck" data-id="' + t.id + '" ' + (done ? 'checked' : '') + '>' +
+            '<span class="mtext">' + t.t + linkHtml + '</span>';
+        } else {
+          li.className = 'monthtask';
+          li.innerHTML = '<span class="mtext" style="margin-left:25px;">' + t.t + linkHtml + '</span>';
+        }
+        ul.appendChild(li);
+      });
+      card.innerHTML = '<div class="weeklabel">Week ' + (idx + 1) + (idx + 1 === cycleWeek ? ' (this week)' : '') + '</div>';
+      card.appendChild(ul);
       monthEl.appendChild(card);
+    });
+    monthEl.querySelectorAll('.monthcheck').forEach(function(cb) {
+      cb.addEventListener('change', function() {
+        savePeriodic(cb.dataset.id, cb.checked);
+        cb.closest('.monthtask').classList.toggle('done', cb.checked);
+      });
     });
   }
 
@@ -398,9 +447,9 @@
     renderGrid();
     renderTimeline();
   });
+  loadPeriodic().then(renderMonthGrid);
   renderExtraTasks();
   renderWeekGrid();
-  renderMonthGrid();
 
   var openState = [];
   window.addEventListener('beforeprint', function() {
