@@ -128,7 +128,9 @@
   .monthtask { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; }
   .monthtask.done .mtext { opacity: 0.55; text-decoration: line-through; }
   .monthcheck { width: 17px; height: 17px; accent-color: var(--jade); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
-  .mtext { font-family: var(--font-ui); font-size: 0.8125rem; line-height: 1.55; color: var(--fg-1); flex: 1; }
+  .mtaskwrap { flex: 1; }
+  .mtext { font-family: var(--font-ui); font-size: 0.8125rem; line-height: 1.55; color: var(--fg-1); }
+  .taskdate { font-family: var(--font-ui); font-size: 0.71875rem; color: var(--jade); margin-top: 2px; }
   @media (max-width: 480px) { .monthgrid { grid-template-columns: 1fr; } }
 
   footer { margin-top: 40px; font-family: var(--font-mono); font-size: 0.65625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
@@ -197,7 +199,7 @@
     <div class="monthgrid" id="month-grid"></div>
   </details>
 
-  <footer>Daily Schedule for Leni · v17</footer>
+  <footer>Daily Schedule for Leni · v18</footer>
 </div>
 
 <script src="i18n.js"></script>
@@ -217,7 +219,8 @@
       dogfoodDone: 'Done, the dog’s food is cooked and stored',
       alsoToday: 'Also today: ', seeTheSteps: 'See the steps: ', arrow: ' →',
       recipeLink: '🍽️ See the recipe in Meal Planner',
-      dayOff: ': day off', week: 'Week ', thisWeekSuffix: ' (this week)', now: 'Now'
+      dayOff: ': day off', week: 'Week ', thisWeekSuffix: ' (this week)', now: 'Now',
+      lastDone: 'Last done: '
     },
     tl: {
       rightNow: 'Ngayon', upNext: 'Susunod', notStartedYet: 'Hindi Pa Nagsisimula', dayComplete: 'Tapos na ang Araw',
@@ -229,7 +232,8 @@
       dogfoodDone: 'Tapos na, luto at nakatago na ang pagkain ng aso',
       alsoToday: 'Ngayon din: ', seeTheSteps: 'Tingnan ang mga hakbang: ', arrow: ' →',
       recipeLink: '🍽️ Tingnan ang recipe sa Meal Planner',
-      dayOff: ': walang pasok', week: 'Linggo ', thisWeekSuffix: ' (ngayong linggo)', now: 'Ngayon'
+      dayOff: ': walang pasok', week: 'Linggo ', thisWeekSuffix: ' (ngayong linggo)', now: 'Ngayon',
+      lastDone: 'Huling ginawa: '
     }
   };
   function ui(key) { var lang = HH_i18n.getLang(); return (UI[lang] && UI[lang][key]) || UI.en[key]; }
@@ -319,6 +323,12 @@
     var lang = HH_i18n.getLang();
     return WEEKDAY_NAMES[lang][d.getDay()] + ', ' + d.getDate() + ' ' + MONTH_NAMES[lang][d.getMonth()] + ' ' + d.getFullYear();
   }
+  function fmtDateShort(dateStr) {
+    // "2026-07-17" -> "17 Jul 2026" (or the Tagalog month, abbreviated)
+    var d = new Date(dateStr + 'T00:00:00');
+    var lang = HH_i18n.getLang();
+    return d.getDate() + ' ' + MONTH_NAMES[lang][d.getMonth()].slice(0, 3) + ' ' + d.getFullYear();
+  }
 
   var now = new Date();
   var nowMin = now.getHours() * 60 + now.getMinutes();
@@ -404,7 +414,9 @@
       tiles += '<div class="tile"><div class="eyebrow sm ink">' + ui('upNext') + '</div><div class="ttask">' + TIMELINE[nextIdx].emoji + ' ' + pick(TIMELINE[nextIdx], 'task') + '</div><div class="tsub">' + fmt(TIMELINE[nextIdx].start) + '</div></div>';
     }
     var dogDone = isPeriodicDone('dogfood', 7);
-    tiles += '<div class="tile streak" id="streak-tile"><div class="eyebrow sm streak">' + ui('onceAWeek') + '</div><div class="ttask">' + ui('cookDogFood') + '</div><div class="tsub">' + ui('oneBatch') + '<a class="cooklink" href="Kitchen.html#task-dogfood">' + ui('storeItSafely') + ui('arrow') + '</a></div><label class="dogcheckrow"><input type="checkbox" id="dogfood-check" ' + (dogDone ? 'checked' : '') + '><span>' + ui('dogfoodDone') + '</span></label></div>';
+    var dogLastDone = periodic['dogfood'] && periodic['dogfood'].lastDone;
+    var dogDateHtml = dogLastDone ? '<div class="taskdate">' + ui('lastDone') + fmtDateShort(dogLastDone) + '</div>' : '';
+    tiles += '<div class="tile streak" id="streak-tile"><div class="eyebrow sm streak">' + ui('onceAWeek') + '</div><div class="ttask">' + ui('cookDogFood') + '</div><div class="tsub">' + ui('oneBatch') + '<a class="cooklink" href="Kitchen.html#task-dogfood">' + ui('storeItSafely') + ui('arrow') + '</a></div>' + dogDateHtml + '<label class="dogcheckrow"><input type="checkbox" id="dogfood-check" ' + (dogDone ? 'checked' : '') + '><span>' + ui('dogfoodDone') + '</span></label></div>';
     grid.innerHTML = tiles;
     if (dow === 6) document.getElementById('streak-tile').style.display = 'block';
     document.getElementById('dogfood-check').addEventListener('change', function() {
@@ -516,9 +528,11 @@
         var done = t.id ? isPeriodicDone(t.id) : false;
         var linkHtml = t.url ? ' <a class="tasklink" style="margin:0;padding:3px 9px;" href="' + t.url + '">&rarr;</a>' : '';
         if (t.id) {
+          var lastDone = periodic[t.id] && periodic[t.id].lastDone;
+          var dateHtml = lastDone ? '<div class="taskdate">' + ui('lastDone') + fmtDateShort(lastDone) + '</div>' : '';
           li.className = 'monthtask' + (done ? ' done' : '');
           li.innerHTML = '<input type="checkbox" class="monthcheck" data-id="' + t.id + '" ' + (done ? 'checked' : '') + '>' +
-            '<span class="mtext">' + pick(t, 't') + linkHtml + '</span>';
+            '<div class="mtaskwrap"><span class="mtext">' + pick(t, 't') + linkHtml + '</span>' + dateHtml + '</div>';
         } else {
           li.className = 'monthtask';
           li.innerHTML = '<span class="mtext" style="margin-left:25px;">' + pick(t, 't') + linkHtml + '</span>';
