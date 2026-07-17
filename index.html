@@ -34,7 +34,7 @@
   .roomnav { display: flex; gap: 8px; flex-wrap: wrap; padding: 20px 0 0 0; }
   .roomnav a, .roomnav span {
     display: inline-flex; align-items: center; gap: 5px;
-    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    font-family: var(--font-ui); font-size: 0.8125rem; font-weight: 700;
     padding: 9px 16px; border-radius: 20px; text-decoration: none;
     border: 1.5px solid var(--bg-3); color: var(--fg-1);
   }
@@ -42,41 +42,41 @@
   .roomnav .active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   .masthead { padding: 24px 0 18px 0; }
-  .eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
   .eyebrow::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
   .eyebrow.jade { color: var(--jade); } .eyebrow.jade::before { background: var(--jade); }
   .eyebrow.streak { color: var(--streak); } .eyebrow.streak::before { background: var(--streak); }
   .eyebrow.ink { color: var(--fg-2); } .eyebrow.ink::before { background: var(--fg-2); }
-  .eyebrow.sm { font-size: 10px; margin-bottom: 8px; }
+  .eyebrow.sm { font-size: 0.625rem; margin-bottom: 8px; }
 
-  h1 { font-family: var(--font-serif); font-weight: 600; font-size: 32px; margin: 0; letter-spacing: -0.01em; }
-  .greeting { font-family: var(--font-ui); font-size: 15px; color: var(--fg-1); margin: 10px 0 4px 0; line-height: 1.55; }
-  .metaline { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); margin: 0; }
+  h1 { font-family: var(--font-serif); font-weight: 600; font-size: 2rem; margin: 0; letter-spacing: -0.01em; }
+  .greeting { font-family: var(--font-ui); font-size: 0.9375rem; color: var(--fg-1); margin: 10px 0 4px 0; line-height: 1.55; }
+  .metaline { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); margin: 0; }
 
   .tilegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
   .tile { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-card); padding: 18px 20px; }
   .tile.now { grid-column: span 2; box-shadow: var(--shadow-raised); }
   .tile.streak { grid-column: span 2; background: var(--streak-soft); border-color: rgba(217,123,32,0.3); display: none; }
   .tile .ttask { font-family: var(--font-serif); font-weight: 600; color: var(--fg-0); line-height: 1.25; margin: 2px 0 3px 0; }
-  .tile.now .ttask { font-size: 24px; }
-  .tile:not(.now) .ttask { font-size: 17px; }
-  .tile .tsub { font-family: var(--font-ui); font-size: 12.5px; color: var(--fg-2); }
+  .tile.now .ttask { font-size: 1.5rem; }
+  .tile:not(.now) .ttask { font-size: 1.0625rem; }
+  .tile .tsub { font-family: var(--font-ui); font-size: 0.78125rem; color: var(--fg-2); }
   @media (max-width: 480px) { .tilegrid { grid-template-columns: 1fr; } .tile.now, .tile.streak { grid-column: span 1; } }
 
-  .extraflag { margin-top: 8px; font-family: var(--font-ui); font-size: 13px; color: var(--jade); line-height: 1.5; }
+  .extraflag { margin-top: 8px; font-family: var(--font-ui); font-size: 0.8125rem; color: var(--jade); line-height: 1.5; }
   .extraflagrow { display: flex; align-items: flex-start; gap: 8px; }
   .extraflag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--jade); flex-shrink: 0; margin-top: 7px; }
   .extraflag .linkrow { margin-top: 8px; margin-left: 13px; }
 
   .edibar { display: flex; align-items: baseline; gap: 10px; border-top: 6px solid var(--fg-0); padding-top: 12px; margin: 34px 0 16px 0; }
-  .edibar .num { font-family: var(--font-serif); font-style: italic; font-size: 15px; color: var(--accent); }
-  .edibar .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--fg-0); }
+  .edibar .num { font-family: var(--font-serif); font-style: italic; font-size: 0.9375rem; color: var(--accent); }
+  .edibar .label { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--fg-0); }
 
-  .priorityband { font-family: var(--font-ui); font-size: 14px; color: var(--fg-1); background: var(--gold-soft); border: 1px solid rgba(201,162,74,0.35); padding: 13px 16px; margin-bottom: 14px; line-height: 1.6; }
+  .priorityband { font-family: var(--font-ui); font-size: 0.875rem; color: var(--fg-1); background: var(--gold-soft); border: 1px solid rgba(201,162,74,0.35); padding: 13px 16px; margin-bottom: 14px; line-height: 1.6; }
   .extraitem { background: var(--bg-1); border: 1px solid var(--bg-3); border-left: 4px solid var(--gold); padding: 12px 16px; margin-bottom: 8px; }
-  .extraitem .extratitle { font-family: var(--font-serif); font-weight: 600; font-size: 15px; color: var(--fg-0); }
-  .extraitem .extradates { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--fg-2); margin-top: 2px; text-transform: uppercase; }
-  .extraitem ul { margin: 8px 0 0 0; padding-left: 20px; font-family: var(--font-ui); font-size: 14px; line-height: 1.6; color: var(--fg-1); }
+  .extraitem .extratitle { font-family: var(--font-serif); font-weight: 600; font-size: 0.9375rem; color: var(--fg-0); }
+  .extraitem .extradates { font-family: var(--font-mono); font-size: 0.65625rem; letter-spacing: 0.06em; color: var(--fg-2); margin-top: 2px; text-transform: uppercase; }
+  .extraitem ul { margin: 8px 0 0 0; padding-left: 20px; font-family: var(--font-ui); font-size: 0.875rem; line-height: 1.6; color: var(--fg-1); }
   .extraitem.expired { display: none; }
   #extra-tasks-section { display: none; }
 
@@ -85,19 +85,19 @@
   .trow.done { opacity: 0.5; }
   .trow.done .ttask { text-decoration: line-through; }
   .rowcheck { width: 19px; height: 19px; accent-color: var(--jade); cursor: pointer; flex-shrink: 0; margin-top: 3px; }
-  .temoji { font-size: 20px; line-height: 1; flex-shrink: 0; width: 24px; text-align: center; margin-top: 1px; }
+  .temoji { font-size: 1.25rem; line-height: 1; flex-shrink: 0; width: 24px; text-align: center; margin-top: 1px; }
   .tinfo { flex: 1; min-width: 0; }
-  .ttime { font-family: var(--font-ui); font-size: 12.5px; font-weight: 500; color: var(--fg-2); }
+  .ttime { font-family: var(--font-ui); font-size: 0.78125rem; font-weight: 500; color: var(--fg-2); }
   .trow.now .ttime { color: var(--accent); font-weight: 700; }
-  .ttask { font-family: var(--font-ui); font-size: 15.5px; font-weight: 600; color: var(--fg-0); margin-top: 1px; }
-  .tsub { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); margin-top: 2px; }
-  .tnowbadge { font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; background: var(--accent); color: var(--bg-0); padding: 2px 7px; margin-left: 8px; text-transform: uppercase; }
-  .cooklink { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-ui); font-size: 12.5px; font-weight: 600; color: var(--streak); text-decoration: none; margin-top: 6px; }
+  .ttask { font-family: var(--font-ui); font-size: 0.96875rem; font-weight: 600; color: var(--fg-0); margin-top: 1px; }
+  .tsub { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); margin-top: 2px; }
+  .tnowbadge { font-family: var(--font-mono); font-size: 0.59375rem; font-weight: 600; letter-spacing: 0.1em; background: var(--accent); color: var(--bg-0); padding: 2px 7px; margin-left: 8px; text-transform: uppercase; }
+  .cooklink { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-ui); font-size: 0.78125rem; font-weight: 600; color: var(--streak); text-decoration: none; margin-top: 6px; }
   .cooklink:hover { text-decoration: underline; }
   .linkrow { margin-top: 6px; }
   .tasklink {
     display: inline-flex; align-items: center; gap: 5px;
-    font-family: var(--font-ui); font-size: 12.5px; font-weight: 700;
+    font-family: var(--font-ui); font-size: 0.78125rem; font-weight: 700;
     color: #fff; background: var(--accent);
     padding: 7px 14px; border-radius: 20px;
     text-decoration: none; margin: 6px 8px 0 0;
@@ -105,26 +105,26 @@
   .tasklink:hover { background: #A82E22; }
 
   details.detailsbox { margin-top: 24px; border-top: 1px solid var(--bg-3); padding-top: 4px; }
-  details.detailsbox summary { cursor: pointer; padding: 14px 0; font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
-  .detailssub { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); margin: -6px 0 14px 0; line-height: 1.5; }
+  details.detailsbox summary { cursor: pointer; padding: 14px 0; font-family: var(--font-mono); font-size: 0.71875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
+  .detailssub { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); margin: -6px 0 14px 0; line-height: 1.5; }
   .weekcard { background: var(--bg-1); border: 1px solid var(--bg-3); padding: 12px 16px; margin-bottom: 8px; }
   .weekcard.today { border-color: var(--jade); border-width: 2px; background: var(--jade-muted); }
-  .weekcard .wtitle { font-family: var(--font-serif); font-weight: 600; font-size: 14px; color: var(--accent); }
-  .weekcard .wtask { font-family: var(--font-ui); font-size: 13.5px; color: var(--fg-1); margin-top: 3px; line-height: 1.55; }
-  .weekcard .tag { display: inline-block; font-family: var(--font-mono); font-size: 10px; font-weight: 600; padding: 1px 8px; border-radius: 10px; margin-left: 4px; background: var(--jade); color: #fff; text-transform: uppercase; }
-  .dayoff { border: 1.5px dashed var(--bg-3); padding: 12px 16px; margin-bottom: 8px; color: var(--fg-3); font-style: italic; font-family: var(--font-ui); font-size: 13.5px; }
+  .weekcard .wtitle { font-family: var(--font-serif); font-weight: 600; font-size: 0.875rem; color: var(--accent); }
+  .weekcard .wtask { font-family: var(--font-ui); font-size: 0.84375rem; color: var(--fg-1); margin-top: 3px; line-height: 1.55; }
+  .weekcard .tag { display: inline-block; font-family: var(--font-mono); font-size: 0.625rem; font-weight: 600; padding: 1px 8px; border-radius: 10px; margin-left: 4px; background: var(--jade); color: #fff; text-transform: uppercase; }
+  .dayoff { border: 1.5px dashed var(--bg-3); padding: 12px 16px; margin-bottom: 8px; color: var(--fg-3); font-style: italic; font-family: var(--font-ui); font-size: 0.84375rem; }
 
   .monthgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
   .monthcard { background: var(--bg-1); border: 1px solid var(--bg-3); padding: 12px 14px; }
   .monthcard.current { border-color: var(--accent); border-width: 2px; background: var(--accent-dark); }
-  .monthcard .weeklabel { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; color: var(--jade); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-  .monthcard ul { margin: 0; padding-left: 18px; font-family: var(--font-ui); font-size: 13px; line-height: 1.55; color: var(--fg-1); }
+  .monthcard .weeklabel { font-family: var(--font-mono); font-size: 0.65625rem; font-weight: 600; color: var(--jade); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .monthcard ul { margin: 0; padding-left: 18px; font-family: var(--font-ui); font-size: 0.8125rem; line-height: 1.55; color: var(--fg-1); }
   @media (max-width: 480px) { .monthgrid { grid-template-columns: 1fr; } }
 
-  footer { margin-top: 40px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
+  footer { margin-top: 40px; font-family: var(--font-mono); font-size: 0.65625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
 
   @media (max-width: 480px) {
-    .sheet { padding: 0 18px; } h1 { font-size: 27px; } .tile.now .ttask { font-size: 20px; }
+    .sheet { padding: 0 18px; } h1 { font-size: 1.6875rem; } .tile.now .ttask { font-size: 1.25rem; }
   }
   @media print {
     .roomnav { display: none; }
@@ -169,8 +169,10 @@
     <div id="extra-tasks"></div>
   </div>
 
-  <div class="edibar"><span class="num">02</span><span class="label">Today, Hour by Hour</span></div>
-  <div id="timeline"></div>
+  <div id="timeline-section">
+    <div class="edibar"><span class="num">02</span><span class="label">Today, Hour by Hour</span></div>
+    <div id="timeline"></div>
+  </div>
 
   <details class="detailsbox">
     <summary>Full week: Monday to Saturday</summary>
@@ -315,6 +317,9 @@
   }
 
   function renderTimeline() {
+    var sectionEl = document.getElementById('timeline-section');
+    if (wt.off) { sectionEl.style.display = 'none'; return; }
+    sectionEl.style.display = '';
     var tlEl = document.getElementById('timeline');
     tlEl.innerHTML = '';
     TIMELINE.forEach(function(b, i) {

@@ -28,7 +28,7 @@
   .roomnav { display: flex; gap: 8px; flex-wrap: wrap; padding: 20px 0 0 0; }
   .roomnav a, .roomnav span {
     display: inline-flex; align-items: center; gap: 5px;
-    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    font-family: var(--font-ui); font-size: 0.8125rem; font-weight: 700;
     padding: 9px 16px; border-radius: 20px; text-decoration: none;
     border: 1.5px solid var(--bg-3); color: var(--fg-1);
   }
@@ -36,15 +36,15 @@
   .roomnav .active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   .masthead { padding: 24px 0 18px 0; }
-  .eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
   .eyebrow::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
 
-  h1 { font-family: var(--font-serif); font-weight: 600; font-size: 32px; margin: 0; letter-spacing: -0.01em; }
-  .metaline { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); margin: 10px 0 0 0; }
+  h1 { font-family: var(--font-serif); font-weight: 600; font-size: 2rem; margin: 0; letter-spacing: -0.01em; }
+  .metaline { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); margin: 10px 0 0 0; }
 
   .edibar { display: flex; align-items: baseline; gap: 10px; border-top: 6px solid var(--fg-0); padding-top: 12px; margin: 34px 0 16px 0; }
-  .edibar .num { font-family: var(--font-serif); font-style: italic; font-size: 15px; color: var(--accent); }
-  .edibar .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--fg-0); }
+  .edibar .num { font-family: var(--font-serif); font-style: italic; font-size: 0.9375rem; color: var(--accent); }
+  .edibar .label { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--fg-0); }
 
   .itemcard {
     display: flex; gap: 14px; align-items: center;
@@ -53,27 +53,27 @@
   }
   .itemphoto { width: 60px; height: 60px; flex-shrink: 0; object-fit: cover; border: 1px solid var(--bg-3); }
   .itemtext { flex: 1; min-width: 0; }
-  .itemcard .itemname { font-family: var(--font-serif); font-weight: 600; font-size: 15px; color: var(--fg-0); }
-  .itemcard .itemnote { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); margin-top: 3px; line-height: 1.5; }
+  .itemcard .itemname { font-family: var(--font-serif); font-weight: 600; font-size: 0.9375rem; color: var(--fg-0); }
+  .itemcard .itemnote { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); margin-top: 3px; line-height: 1.5; }
   .itemcard .itemgap {
-    display: inline-block; font-family: var(--font-ui); font-size: 11.5px; font-weight: 600;
+    display: inline-block; font-family: var(--font-ui); font-size: 0.71875rem; font-weight: 600;
     color: var(--streak); background: var(--streak-soft); border: 1px solid rgba(217,123,32,0.3);
     padding: 2px 9px; margin-top: 7px;
   }
   @media (max-width: 420px) { .itemphoto { width: 48px; height: 48px; } }
 
-  .buylink { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-ui); font-size: 12.5px; font-weight: 600; color: var(--accent); text-decoration: none; margin-top: 8px; }
+  .buylink { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-ui); font-size: 0.78125rem; font-weight: 600; color: var(--accent); text-decoration: none; margin-top: 8px; }
   .buylink:hover { text-decoration: underline; }
   .buylink .bprice { color: var(--fg-3); font-weight: 500; }
 
   .placeholder {
     border: 1.5px dashed var(--bg-3); padding: 16px 18px; margin-bottom: 8px;
-    font-family: var(--font-ui); font-size: 13.5px; color: var(--fg-3); font-style: italic; line-height: 1.55;
+    font-family: var(--font-ui); font-size: 0.84375rem; color: var(--fg-3); font-style: italic; line-height: 1.55;
   }
 
-  footer { margin-top: 40px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
+  footer { margin-top: 40px; font-family: var(--font-mono); font-size: 0.65625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
 
-  @media (max-width: 480px) { .sheet { padding: 0 18px; } h1 { font-size: 27px; } }
+  @media (max-width: 480px) { .sheet { padding: 0 18px; } h1 { font-size: 1.6875rem; } }
 </style>
 </head>
 <body>

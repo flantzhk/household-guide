@@ -26,62 +26,62 @@
   body { font-family: var(--font-ui); color: var(--fg-0); background: var(--bg-0); margin: 0; padding: 0 0 64px 0; -webkit-font-smoothing: antialiased; }
   .sheet { max-width: 680px; margin: 0 auto; padding: 0 24px; }
 
-  .privatebar { background: var(--fg-0); color: var(--bg-0); font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; padding: 9px; }
+  .privatebar { background: var(--fg-0); color: var(--bg-0); font-family: var(--font-mono); font-size: 0.65625rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; padding: 9px; }
 
   .masthead { padding: 24px 0 18px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--streak); display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--streak); display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
   .eyebrow::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--streak); flex-shrink: 0; }
   .eyebrow.jade { color: var(--jade); } .eyebrow.jade::before { background: var(--jade); }
   .eyebrow.ink { color: var(--fg-2); } .eyebrow.ink::before { background: var(--fg-2); }
-  .eyebrow.sm { font-size: 10px; margin-bottom: 8px; }
+  .eyebrow.sm { font-size: 0.625rem; margin-bottom: 8px; }
 
-  h1 { font-family: var(--font-serif); font-weight: 600; font-size: 30px; margin: 0; letter-spacing: -0.01em; }
-  .metaline { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); margin: 8px 0 0 0; }
+  h1 { font-family: var(--font-serif); font-weight: 600; font-size: 1.875rem; margin: 0; letter-spacing: -0.01em; }
+  .metaline { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); margin: 8px 0 0 0; }
   .refreshbtn {
-    font-family: var(--font-ui); font-size: 13px; font-weight: 600; color: var(--fg-0);
+    font-family: var(--font-ui); font-size: 0.8125rem; font-weight: 600; color: var(--fg-0);
     background: var(--bg-1); border: 1.5px solid var(--bg-3); padding: 10px 18px; cursor: pointer; flex-shrink: 0;
   }
   .refreshbtn:hover { border-color: var(--accent); color: var(--accent); }
   .refreshbtn:active { transform: translateY(1px); }
 
   .progresscard { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-raised); padding: 20px 22px; margin-top: 16px; }
-  .progresscard .ptask { font-family: var(--font-serif); font-weight: 600; font-size: 24px; color: var(--fg-0); }
+  .progresscard .ptask { font-family: var(--font-serif); font-weight: 600; font-size: 1.5rem; color: var(--fg-0); }
   .progressbar { height: 8px; background: var(--bg-3); margin-top: 12px; overflow: hidden; }
   .progressbar .fill { height: 100%; background: var(--jade); transition: width 0.3s ease; }
-  .progresscard .pcount { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); margin-top: 8px; }
+  .progresscard .pcount { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); margin-top: 8px; }
 
   .tilegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
   .tile { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-card); padding: 16px 18px; }
-  .tile .ttask { font-family: var(--font-serif); font-weight: 600; font-size: 16px; color: var(--fg-0); margin: 2px 0 3px 0; }
-  .tile .tsub { font-family: var(--font-ui); font-size: 12.5px; color: var(--fg-2); }
+  .tile .ttask { font-family: var(--font-serif); font-weight: 600; font-size: 1rem; color: var(--fg-0); margin: 2px 0 3px 0; }
+  .tile .tsub { font-family: var(--font-ui); font-size: 0.78125rem; color: var(--fg-2); }
   @media (max-width: 480px) { .tilegrid { grid-template-columns: 1fr; } }
 
-  .extraflag { display: flex; align-items: flex-start; gap: 8px; margin-top: 6px; font-family: var(--font-ui); font-size: 12.5px; color: var(--jade); line-height: 1.5; }
+  .extraflag { display: flex; align-items: flex-start; gap: 8px; margin-top: 6px; font-family: var(--font-ui); font-size: 0.78125rem; color: var(--jade); line-height: 1.5; }
   .extraflag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--jade); flex-shrink: 0; margin-top: 6px; }
 
   .edibar { display: flex; align-items: baseline; gap: 10px; border-top: 6px solid var(--fg-0); padding-top: 12px; margin: 34px 0 16px 0; }
-  .edibar .num { font-family: var(--font-serif); font-style: italic; font-size: 15px; color: var(--accent); }
-  .edibar .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--fg-0); }
+  .edibar .num { font-family: var(--font-serif); font-style: italic; font-size: 0.9375rem; color: var(--accent); }
+  .edibar .label { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--fg-0); }
 
   .trow { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--bg-3); }
   .trow.done { background: var(--jade-muted); margin: 0 -16px; padding-left: 16px; padding-right: 16px; border-bottom-color: transparent; }
-  .tstatus { width: 22px; height: 22px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; border: 1.5px solid var(--bg-3); color: transparent; }
+  .tstatus { width: 22px; height: 22px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.9375rem; border: 1.5px solid var(--bg-3); color: transparent; }
   .trow.done .tstatus { background: var(--jade); border-color: var(--jade); color: #fff; }
-  .temoji { font-size: 20px; line-height: 1; flex-shrink: 0; width: 24px; text-align: center; margin-top: 1px; }
+  .temoji { font-size: 1.25rem; line-height: 1; flex-shrink: 0; width: 24px; text-align: center; margin-top: 1px; }
   .tinfo { flex: 1; min-width: 0; }
-  .ttime { font-family: var(--font-ui); font-size: 12.5px; font-weight: 500; color: var(--fg-2); }
-  .ttask { font-family: var(--font-ui); font-size: 15.5px; font-weight: 600; color: var(--fg-0); margin-top: 1px; }
+  .ttime { font-family: var(--font-ui); font-size: 0.78125rem; font-weight: 500; color: var(--fg-2); }
+  .ttask { font-family: var(--font-ui); font-size: 0.96875rem; font-weight: 600; color: var(--fg-0); margin-top: 1px; }
   .trow.done .ttask { color: var(--jade); }
 
   .extraitem { background: var(--bg-1); border: 1px solid var(--bg-3); border-left: 4px solid var(--gold); padding: 12px 16px; margin-bottom: 8px; }
-  .extraitem .extratitle { font-family: var(--font-serif); font-weight: 600; font-size: 15px; color: var(--fg-0); }
+  .extraitem .extratitle { font-family: var(--font-serif); font-weight: 600; font-size: 0.9375rem; color: var(--fg-0); }
   #extra-tasks-section { display: none; }
 
-  footer { margin-top: 40px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
-  .backlink { font-family: var(--font-ui); font-size: 13px; color: var(--fg-2); text-decoration: none; }
+  footer { margin-top: 40px; font-family: var(--font-mono); font-size: 0.65625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
+  .backlink { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); text-decoration: none; }
   .backlink:hover { color: var(--accent); }
 
-  @media (max-width: 480px) { .sheet { padding: 0 18px; } h1 { font-size: 24px; } }
+  @media (max-width: 480px) { .sheet { padding: 0 18px; } h1 { font-size: 1.5rem; } }
 </style>
 </head>
 <body>
@@ -110,8 +110,10 @@
     <div id="extra-tasks"></div>
   </div>
 
-  <div class="edibar"><span class="num">02</span><span class="label">Today, Hour by Hour</span></div>
-  <div id="timeline"></div>
+  <div id="timeline-section">
+    <div class="edibar"><span class="num">02</span><span class="label">Today, Hour by Hour</span></div>
+    <div id="timeline"></div>
+  </div>
 
   <footer><a class="backlink" href="index.html">&larr; Leni's page</a> &middot; Today's Progress, Employer View</footer>
 </div>
@@ -188,6 +190,9 @@
     } else {
       grid.innerHTML = '';
     }
+    var sectionEl = document.getElementById('timeline-section');
+    if (wt.off) { sectionEl.style.display = 'none'; return; }
+    sectionEl.style.display = '';
     var tlEl = document.getElementById('timeline');
     tlEl.innerHTML = '';
     TIMELINE.forEach(function(b, i) {
