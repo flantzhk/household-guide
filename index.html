@@ -197,7 +197,7 @@
     <div class="monthgrid" id="month-grid"></div>
   </details>
 
-  <footer>Daily Schedule for Leni · v15</footer>
+  <footer>Daily Schedule for Leni · v16</footer>
 </div>
 
 <script>
@@ -290,12 +290,25 @@
   var todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   document.getElementById('today-date').textContent = fmtDateLong(now);
 
+  // Preview mode: for Faith (or testing) peeking at Leni's exact view without it
+  // counting as a real visit. Suppresses the heartbeat and all saves; checkboxes
+  // still respond visually but nothing reaches the server.
+  var isPreview = /[?&]preview=1\b/.test(location.search);
+  if (isPreview) {
+    var pbar = document.createElement('div');
+    pbar.style.cssText = 'background:var(--fg-0);color:var(--bg-0);font-family:var(--font-mono);font-size:0.65625rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;text-align:center;padding:9px;';
+    pbar.textContent = 'Preview mode: nothing on this page is saved';
+    document.body.insertBefore(pbar, document.body.firstChild);
+  }
+
   // Heartbeat: tell the server this page was opened today, so Faith's view can tell
   // "task skipped" apart from "the page was never opened". Fire-and-forget.
-  fetch(API + '/opened/' + todayStr, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ time: String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') })
-  }).catch(function() {});
+  if (!isPreview) {
+    fetch(API + '/opened/' + todayStr, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ time: String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') })
+    }).catch(function() {});
+  }
 
   var currentIdx = -1, nextIdx = -1;
   for (var i = 0; i < TIMELINE.length; i++) {
@@ -312,6 +325,7 @@
   }
   function saveCheck(id, value) {
     checks[id] = value;
+    if (isPreview) return;
     fetch(API + '/checks/' + todayStr, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: id, checked: value })
@@ -326,6 +340,7 @@
   function savePeriodic(id, done) {
     periodic[id] = periodic[id] || { lastDone: null, history: [] };
     periodic[id].lastDone = done ? todayStr : periodic[id].lastDone;
+    if (isPreview) return;
     fetch(API + '/periodic/' + id, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ done: done, date: todayStr })
