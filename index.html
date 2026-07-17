@@ -147,24 +147,24 @@
 <body>
 <div class="sheet">
   <div class="roomnav">
-    <span class="active">⏰ Daily Schedule</span>
-    <a href="how-to-clean.html">🧹 How to Clean</a>
-    <a href="restocking.html">📦 Restocking List</a>
+    <span class="active" data-tl='⏰ Iskedyul Araw-araw'>⏰ Daily Schedule</span>
+    <a href="how-to-clean.html" data-tl='🧹 Paano Maglinis'>🧹 How to Clean</a>
+    <a href="restocking.html" data-tl='📦 Listahan ng Bibilhin'>📦 Restocking List</a>
   </div>
 
   <div class="masthead">
-    <div class="eyebrow ink">For Leni</div>
-    <h1 id="greeting-h1">Hi Leni! 👋</h1>
-    <div class="greeting">Here's today's schedule. Thank you for everything you do for our home! 💛</div>
+    <div class="eyebrow ink" data-tl='Para kay Leni'>For Leni</div>
+    <h1 id="greeting-h1" data-tl='Hi Leni! 👋'>Hi Leni! 👋</h1>
+    <div class="greeting" data-tl='Narito ang iskedyul ngayon. Salamat sa lahat ng ginagawa mo para sa aming tahanan! 💛'>Here's today's schedule. Thank you for everything you do for our home! 💛</div>
     <div class="metaline" id="today-date"></div>
-    <div class="metaline">Working hours: Monday to Saturday, 7am to 7pm.</div>
+    <div class="metaline" data-tl='Oras ng trabaho: Lunes hanggang Sabado, 7am hanggang 7pm.'>Working hours: Monday to Saturday, 7am to 7pm.</div>
   </div>
 
   <div class="tilegrid" id="tile-grid"></div>
 
   <div id="extra-tasks-section">
-    <div class="edibar"><span class="num">01</span><span class="label">Extra Tasks From Faith</span></div>
-    <div class="priorityband">I'll add anything extra here myself, like if we're traveling or need something special done. Please do this first, before the rest of your day. 💛</div>
+    <div class="edibar"><span class="num">01</span><span class="label" data-tl='Mga Karagdagang Gawain Mula kay Faith'>Extra Tasks From Faith</span></div>
+    <div class="priorityband" data-tl="Ako mismo ang magdaragdag ng kahit ano dito, tulad kapag kami ay nasa biyahe o may kailangang gawin nang espesyal. Gawin muna ito bago ang iba pang gawain ngayong araw. 💛">I'll add anything extra here myself, like if we're traveling or need something special done. Please do this first, before the rest of your day. 💛</div>
     <!-- To add a task: copy the example below, fill in real dates (YYYY-MM-DD) and content.
          It disappears on its own the day after data-end. Leave data-end off for something with no end date.
          Also bump the "Last updated" note in CLAUDE.md's Household Help conventions if you want to track it.
@@ -181,29 +181,59 @@
   </div>
 
   <div id="timeline-section">
-    <div class="edibar"><span class="num">02</span><span class="label">Today, Hour by Hour</span></div>
+    <div class="edibar"><span class="num">02</span><span class="label" data-tl='Ngayong Araw, Oras-Oras'>Today, Hour by Hour</span></div>
     <div id="timeline"></div>
   </div>
 
   <details class="detailsbox">
-    <summary>Full week: Monday to Saturday</summary>
-    <div class="detailssub">Every day, do the normal cleaning list. Some days also have one extra job, shown below. Sunday is your day off.</div>
+    <summary data-tl='Buong linggo: Lunes hanggang Sabado'>Full week: Monday to Saturday</summary>
+    <div class="detailssub" data-tl='Gawin araw-araw ang karaniwang listahan ng paglilinis. May isa pang karagdagang gawain sa ilang araw, makikita sa ibaba. Linggo ang araw ninyong pahinga.'>Every day, do the normal cleaning list. Some days also have one extra job, shown below. Sunday is your day off.</div>
     <div id="week-grid"></div>
   </details>
 
   <details class="detailsbox">
-    <summary>The once-a-month tasks</summary>
-    <div class="detailssub">These jobs happen on different Saturdays, one at a time. This way, they do not build up.</div>
+    <summary data-tl='Ang mga gawaing minsan-minsan lang sa isang buwan'>The once-a-month tasks</summary>
+    <div class="detailssub" data-tl='Ang mga gawaing ito ay ginagawa sa magkakaibang Sabado, isa-isa. Sa ganitong paraan, hindi ito naiipon.'>These jobs happen on different Saturdays, one at a time. This way, they do not build up.</div>
     <div class="monthgrid" id="month-grid"></div>
   </details>
 
   <footer>Daily Schedule for Leni · v16</footer>
 </div>
 
+<script src="i18n.js"></script>
 <script>
 (function() {
   var API = 'https://household-help-api.faith-lantz-ee8.workers.dev';
   var MEAL_PLANNER = 'https://flantzhk.github.io/meal-planner/helper.html';
+
+  var UI = {
+    en: {
+      rightNow: 'Right Now', upNext: 'Up Next', notStartedYet: 'Not Started Yet', dayComplete: 'Day Complete',
+      firstJobToday: 'The first job today: ', startsAt: 'Starts at ', until: 'Until ',
+      seeYouTomorrow: 'See you tomorrow! 💛', today: 'Today',
+      happySunday: 'Happy Sunday, Leni! Enjoy your day off 🎉',
+      onceAWeek: '🐾 Once A Week', cookDogFood: 'Cook dog food for the whole week',
+      oneBatch: 'One batch today, enough for all 7 days. ', storeItSafely: '🧊 How to store it safely',
+      dogfoodDone: 'Done, the dog’s food is cooked and stored',
+      alsoToday: 'Also today: ', seeTheSteps: 'See the steps: ', arrow: ' →',
+      recipeLink: '🍽️ See the recipe in Meal Planner',
+      dayOff: ': day off', week: 'Week ', thisWeekSuffix: ' (this week)', now: 'Now'
+    },
+    tl: {
+      rightNow: 'Ngayon', upNext: 'Susunod', notStartedYet: 'Hindi Pa Nagsisimula', dayComplete: 'Tapos na ang Araw',
+      firstJobToday: 'Unang gawain ngayon: ', startsAt: 'Magsisimula nang ', until: 'Hanggang ',
+      seeYouTomorrow: 'Kita tayo bukas! 💛', today: 'Ngayon',
+      happySunday: 'Maligayang Linggo, Leni! I-enjoy ang inyong day off 🎉',
+      onceAWeek: '🐾 Isang Beses Kada Linggo', cookDogFood: 'Magluto ng pagkain ng aso para sa buong linggo',
+      oneBatch: 'Isang batch ngayon, sapat na para sa lahat ng 7 araw. ', storeItSafely: '🧊 Paano ito itago nang ligtas',
+      dogfoodDone: 'Tapos na, luto at nakatago na ang pagkain ng aso',
+      alsoToday: 'Ngayon din: ', seeTheSteps: 'Tingnan ang mga hakbang: ', arrow: ' →',
+      recipeLink: '🍽️ Tingnan ang recipe sa Meal Planner',
+      dayOff: ': walang pasok', week: 'Linggo ', thisWeekSuffix: ' (ngayong linggo)', now: 'Ngayon'
+    }
+  };
+  function ui(key) { var lang = HH_i18n.getLang(); return (UI[lang] && UI[lang][key]) || UI.en[key]; }
+  function pick(obj, field) { var lang = HH_i18n.getLang(); return (lang === 'tl' && obj[field + '_tl']) || obj[field]; }
 
   function tm(h, m) { return h * 60 + m; }
   function fmt(mins) {
@@ -214,56 +244,61 @@
   }
 
   var TIMELINE = [
-    { id: 'coffee',        start: tm(7,0),  end: tm(7,10),  task: 'Make coffee', emoji: '☕' },
-    { id: 'walk1',         start: tm(7,10), end: tm(7,30),  task: 'Walk the dog', sub: 'First walk, 20 minutes', emoji: '🐕' },
-    { id: 'breakfast',     start: tm(7,30), end: tm(8,0),   task: 'Prepare breakfast', sub: 'Simple and quick', emoji: '🍳', cook: true },
-    { id: 'laundry',       start: tm(8,0),  end: tm(8,15),  task: 'Start a load of laundry', emoji: '🧺' },
-    { id: 'clean-am',      start: tm(8,15), end: tm(10,50), task: 'House cleaning', sub: "See each room's guide for the full checklist", emoji: '✨' },
-    { id: 'walk2',         start: tm(10,50),end: tm(11,10), task: 'Walk the dog', sub: 'Second walk, 20 minutes', emoji: '🐕' },
-    { id: 'lunch-prep',    start: tm(11,15),end: tm(12,0),  task: 'Prepare lunch', sub: '45 minutes, properly cooked', emoji: '🍲', cook: true },
-    { id: 'lunch',         start: tm(12,0), end: tm(13,0),  task: 'Lunch', sub: 'We eat at the same time. This is your lunch break too. The time may shift some days, I\'ll let you know.', emoji: '🍽️' },
-    { id: 'lunch-cleanup', start: tm(13,0), end: tm(13,30), task: 'Lunch cleanup', emoji: '🧽' },
-    { id: 'clean-pm',      start: tm(13,30),end: tm(16,40), task: 'Continue cleaning', sub: 'Plus laundry follow-up', emoji: '✨', extraJobHere: true },
-    { id: 'walk3',         start: tm(16,40),end: tm(17,0),  task: 'Walk the dog', sub: 'Third walk, 20 minutes', emoji: '🐕' },
-    { id: 'dinner-prep',   start: tm(17,0), end: tm(18,0),  task: 'Prepare dinner', sub: '60 minutes, timed to be ready right at 6:00 PM', emoji: '🍲', cook: true },
-    { id: 'dinner',        start: tm(18,0), end: tm(18,30), task: 'Dinner', sub: 'Served at 6:00 PM sharp', emoji: '🍽️' },
-    { id: 'dinner-cleanup',start: tm(18,30),end: tm(19,0),  task: 'Dinner cleanup', emoji: '🧽' },
-    { start: tm(19,0), end: tm(19,0), task: 'Go home', emoji: '🚪' }
+    { id: 'coffee',        start: tm(7,0),  end: tm(7,10),  task: 'Make coffee', task_tl: 'Gumawa ng kape', emoji: '☕' },
+    { id: 'walk1',         start: tm(7,10), end: tm(7,30),  task: 'Walk the dog', task_tl: 'Ilakad ang aso', sub: 'First walk, 20 minutes', sub_tl: 'Unang lakad, 20 minuto', emoji: '🐕' },
+    { id: 'breakfast',     start: tm(7,30), end: tm(8,0),   task: 'Prepare breakfast', task_tl: 'Maghanda ng almusal', sub: 'Simple and quick', sub_tl: 'Simple at mabilis', emoji: '🍳', cook: true },
+    { id: 'laundry',       start: tm(8,0),  end: tm(8,15),  task: 'Start a load of laundry', task_tl: 'Simulan ang isang labada', emoji: '🧺' },
+    { id: 'clean-am',      start: tm(8,15), end: tm(10,50), task: 'House cleaning', task_tl: 'Paglilinis ng bahay', sub: "See each room's guide for the full checklist", sub_tl: 'Tingnan ang gabay ng bawat silid para sa buong listahan', emoji: '✨' },
+    { id: 'walk2',         start: tm(10,50),end: tm(11,10), task: 'Walk the dog', task_tl: 'Ilakad ang aso', sub: 'Second walk, 20 minutes', sub_tl: 'Pangalawang lakad, 20 minuto', emoji: '🐕' },
+    { id: 'lunch-prep',    start: tm(11,15),end: tm(12,0),  task: 'Prepare lunch', task_tl: 'Maghanda ng tanghalian', sub: '45 minutes, properly cooked', sub_tl: '45 minuto, lutong-luto', emoji: '🍲', cook: true },
+    { id: 'lunch',         start: tm(12,0), end: tm(13,0),  task: 'Lunch', task_tl: 'Tanghalian', sub: 'We eat at the same time. This is your lunch break too. The time may shift some days, I\'ll let you know.', sub_tl: 'Sabay kaming kumakain. Ito rin ang inyong break sa tanghalian. Minsan nagbabago ang oras, sasabihin ko sa inyo.', emoji: '🍽️' },
+    { id: 'lunch-cleanup', start: tm(13,0), end: tm(13,30), task: 'Lunch cleanup', task_tl: 'Paglilinis pagkatapos ng tanghalian', emoji: '🧽' },
+    { id: 'clean-pm',      start: tm(13,30),end: tm(16,40), task: 'Continue cleaning', task_tl: 'Ipagpatuloy ang paglilinis', sub: 'Plus laundry follow-up', sub_tl: 'Kasama ang pagsunod sa labada', emoji: '✨', extraJobHere: true },
+    { id: 'walk3',         start: tm(16,40),end: tm(17,0),  task: 'Walk the dog', task_tl: 'Ilakad ang aso', sub: 'Third walk, 20 minutes', sub_tl: 'Pangatlong lakad, 20 minuto', emoji: '🐕' },
+    { id: 'dinner-prep',   start: tm(17,0), end: tm(18,0),  task: 'Prepare dinner', task_tl: 'Maghanda ng hapunan', sub: '60 minutes, timed to be ready right at 6:00 PM', sub_tl: '60 minuto, dapat handa ng eksaktong 6:00 PM', emoji: '🍲', cook: true },
+    { id: 'dinner',        start: tm(18,0), end: tm(18,30), task: 'Dinner', task_tl: 'Hapunan', sub: 'Served at 6:00 PM sharp', sub_tl: 'Ihahain ng eksaktong 6:00 PM', emoji: '🍽️' },
+    { id: 'dinner-cleanup',start: tm(18,30),end: tm(19,0),  task: 'Dinner cleanup', task_tl: 'Paglilinis pagkatapos ng hapunan', emoji: '🧽' },
+    { start: tm(19,0), end: tm(19,0), task: 'Go home', task_tl: 'Umuwi', emoji: '🚪' }
   ];
 
   var WEEKDAY_TASKS = {
-    1: { name: 'Monday', html: 'Change bed sheets &amp; duvet covers, all 3 bedrooms &middot; Fresh towels &amp; bath mat &middot; Ironing <span class="tag">1 of 2</span>',
-         links: [{ label: 'Bedroom sheets', url: 'Bedroom.html#task-sheets' }, { label: 'Bathroom towels', url: 'Bathroom.html#task-towels' }] },
-    2: { name: 'Tuesday', html: 'Bathroom: deep-clean toilet brush &amp; holder, clean the drains',
-         links: [{ label: 'Toilet brush & holder', url: 'Bathroom.html#task-toiletbrush' }, { label: 'Drains', url: 'Bathroom.html#task-drains' }] },
-    3: { name: 'Wednesday', html: 'Kitchen: deep-clean the fridge',
-         links: [{ label: 'Fridge deep-clean', url: 'Kitchen.html#task-fridge' }] },
-    4: { name: 'Thursday', html: 'Fresh towels &amp; bath mat &middot; Ironing <span class="tag">2 of 2</span>',
-         links: [{ label: 'Bathroom towels', url: 'Bathroom.html#task-towels' }] },
-    5: { name: 'Friday', html: 'Living/Dining: check sofa covers, deep-dust shelves, wipe the piano, vacuum under &amp; behind the sofa, lift &amp; vacuum under the rug',
-         links: [{ label: 'Sofa covers', url: 'living-dining.html#task-sofacovers' }, { label: 'Shelves', url: 'living-dining.html#task-shelves' }, { label: 'Piano', url: 'living-dining.html#task-piano' }, { label: 'Vacuum sofa & rug', url: 'living-dining.html#task-vacuumsofa' }] },
-    6: { name: 'Saturday', html: 'Do one of the "Once In A While" tasks below', monthly: true },
-    0: { name: 'Sunday', off: true }
+    1: { name: 'Monday', name_tl: 'Lunes', html: 'Change bed sheets &amp; duvet covers, all 3 bedrooms &middot; Fresh towels &amp; bath mat &middot; Ironing <span class="tag">1 of 2</span>',
+         html_tl: 'Palitan ang kumot at duvet cover, sa lahat ng 3 kwarto &middot; Bagong tuwalya at bath mat &middot; Pagplantsa <span class="tag">1 ng 2</span>',
+         links: [{ label: 'Bedroom sheets', label_tl: 'Kumot sa kwarto', url: 'Bedroom.html#task-sheets' }, { label: 'Bathroom towels', label_tl: 'Tuwalya sa banyo', url: 'Bathroom.html#task-towels' }] },
+    2: { name: 'Tuesday', name_tl: 'Martes', html: 'Bathroom: deep-clean toilet brush &amp; holder, clean the drains',
+         html_tl: 'Banyo: lubusang linisin ang brush ng inidoro at holder nito, linisin ang mga drain',
+         links: [{ label: 'Toilet brush & holder', label_tl: 'Brush ng inidoro at holder', url: 'Bathroom.html#task-toiletbrush' }, { label: 'Drains', label_tl: 'Mga drain', url: 'Bathroom.html#task-drains' }] },
+    3: { name: 'Wednesday', name_tl: 'Miyerkules', html: 'Kitchen: deep-clean the fridge',
+         html_tl: 'Kusina: lubusang linisin ang refrigerator',
+         links: [{ label: 'Fridge deep-clean', label_tl: 'Lubusang paglilinis ng refrigerator', url: 'Kitchen.html#task-fridge' }] },
+    4: { name: 'Thursday', name_tl: 'Huwebes', html: 'Fresh towels &amp; bath mat &middot; Ironing <span class="tag">2 of 2</span>',
+         html_tl: 'Bagong tuwalya at bath mat &middot; Pagplantsa <span class="tag">2 ng 2</span>',
+         links: [{ label: 'Bathroom towels', label_tl: 'Tuwalya sa banyo', url: 'Bathroom.html#task-towels' }] },
+    5: { name: 'Friday', name_tl: 'Biyernes', html: 'Living/Dining: check sofa covers, deep-dust shelves, wipe the piano, vacuum under &amp; behind the sofa, lift &amp; vacuum under the rug',
+         html_tl: 'Living/Dining: tingnan ang takip ng sofa, lubusang alisin ang alikabok sa istante, punasan ang piano, i-vacuum ang ilalim at likod ng sofa, itaas at i-vacuum ang ilalim ng rug',
+         links: [{ label: 'Sofa covers', label_tl: 'Takip ng sofa', url: 'living-dining.html#task-sofacovers' }, { label: 'Shelves', label_tl: 'Mga istante', url: 'living-dining.html#task-shelves' }, { label: 'Piano', label_tl: 'Piano', url: 'living-dining.html#task-piano' }, { label: 'Vacuum sofa & rug', label_tl: 'I-vacuum ang sofa at rug', url: 'living-dining.html#task-vacuumsofa' }] },
+    6: { name: 'Saturday', name_tl: 'Sabado', html: 'Do one of the "Once In A While" tasks below', html_tl: 'Gawin ang isa sa mga gawaing &quot;Paminsan-minsan&quot; sa ibaba', monthly: true },
+    0: { name: 'Sunday', name_tl: 'Linggo', off: true }
   };
 
   var MONTH_CYCLE = [
-    [{ id: 'cabinet', t: 'Bathroom: clear out &amp; wipe under-sink and mirror cabinet shelves', url: 'Bathroom.html#task-cabinet' },
-     { id: 'rangehood', t: 'Kitchen: clean the range hood filter', url: 'Kitchen.html#task-rangehood' },
-     { id: 'floorreset', t: 'Living/Dining: full floor reset', url: 'living-dining.html#task-floorreset' }],
-    [{ id: 'wardrobetop', t: 'Bedroom: dust top of wardrobe &amp; high, unreachable areas', url: 'Bedroom.html#task-wardrobetop' },
-     { id: 'ricecooker', t: 'Kitchen: deep-clean the rice cooker', url: 'Kitchen.html#task-ricecooker' },
-     { id: 'cushions', t: 'Living/Dining: rotate &amp; flip sofa cushions', url: 'living-dining.html#task-cushions' }],
-    [{ id: 'underbed', t: 'Bedroom: under the bed', url: 'Bedroom.html#task-underbed' },
-     { id: 'waterdispenser', t: 'Kitchen: descale the water dispenser (only if the light is on)', url: 'Kitchen.html#task-waterdispenser' },
-     { id: 'pianolegs', t: 'Living/Dining: dust the piano legs, pedals &amp; bench', url: 'living-dining.html#task-pianolegs' }],
-    [{ id: 'airpurifier', t: 'Bedroom: clean the air purifier', url: 'Bedroom.html#task-airpurifier' },
-     { t: 'Extra: anything you missed in the last 3 weeks', url: null }]
+    [{ id: 'cabinet', t: 'Bathroom: clear out &amp; wipe under-sink and mirror cabinet shelves', t_tl: 'Banyo: alisin ang laman at punasan ang mga istante sa ilalim ng lababo at sa cabinet ng salamin', url: 'Bathroom.html#task-cabinet' },
+     { id: 'rangehood', t: 'Kitchen: clean the range hood filter', t_tl: 'Kusina: linisin ang filter ng range hood', url: 'Kitchen.html#task-rangehood' },
+     { id: 'floorreset', t: 'Living/Dining: full floor reset', t_tl: 'Living/Dining: lubusang paglilinis ng sahig', url: 'living-dining.html#task-floorreset' }],
+    [{ id: 'wardrobetop', t: 'Bedroom: dust top of wardrobe &amp; high, unreachable areas', t_tl: 'Kwarto: alisin ang alikabok sa ibabaw ng wardrobe at sa mataas na bahaging mahirap abutin', url: 'Bedroom.html#task-wardrobetop' },
+     { id: 'ricecooker', t: 'Kitchen: deep-clean the rice cooker', t_tl: 'Kusina: lubusang linisin ang rice cooker', url: 'Kitchen.html#task-ricecooker' },
+     { id: 'cushions', t: 'Living/Dining: rotate &amp; flip sofa cushions', t_tl: 'Living/Dining: baligtarin at palitan ang posisyon ng mga cushion ng sofa', url: 'living-dining.html#task-cushions' }],
+    [{ id: 'underbed', t: 'Bedroom: under the bed', t_tl: 'Kwarto: ilalim ng kama', url: 'Bedroom.html#task-underbed' },
+     { id: 'waterdispenser', t: 'Kitchen: descale the water dispenser (only if the light is on)', t_tl: 'Kusina: i-descale ang water dispenser (kapag naka-on lang ang ilaw)', url: 'Kitchen.html#task-waterdispenser' },
+     { id: 'pianolegs', t: 'Living/Dining: dust the piano legs, pedals &amp; bench', t_tl: 'Living/Dining: alisin ang alikabok sa paa ng piano, pedal, at bench', url: 'living-dining.html#task-pianolegs' }],
+    [{ id: 'airpurifier', t: 'Bedroom: clean the air purifier', t_tl: 'Kwarto: linisin ang air purifier', url: 'Bedroom.html#task-airpurifier' },
+     { t: 'Extra: anything you missed in the last 3 weeks', t_tl: 'Extra: anumang nalimutan sa nakaraang 3 linggo', url: null }]
   ];
 
   function linkRow(links) {
     if (!links || !links.length) return '';
     return '<div class="linkrow">' + links.map(function(l) {
-      return '<a class="tasklink" href="' + l.url + '">See the steps: ' + l.label + ' &rarr;</a>';
+      return '<a class="tasklink" href="' + l.url + '">' + ui('seeTheSteps') + pick(l, 'label') + ui('arrow') + '</a>';
     }).join('') + '</div>';
   }
 
@@ -276,10 +311,13 @@
     return 1 + Math.round(diff / 7);
   }
 
-  var WEEKDAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var WEEKDAY_NAMES = { en: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+                         tl: ['Linggo','Lunes','Martes','Miyerkules','Huwebes','Biyernes','Sabado'] };
+  var MONTH_NAMES = { en: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+                       tl: ['Enero','Pebrero','Marso','Abril','Mayo','Hunyo','Hulyo','Agosto','Setyembre','Oktubre','Nobyembre','Disyembre'] };
   function fmtDateLong(d) {
-    return WEEKDAY_NAMES[d.getDay()] + ', ' + d.getDate() + ' ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
+    var lang = HH_i18n.getLang();
+    return WEEKDAY_NAMES[lang][d.getDay()] + ', ' + d.getDate() + ' ' + MONTH_NAMES[lang][d.getMonth()] + ' ' + d.getFullYear();
   }
 
   var now = new Date();
@@ -350,23 +388,23 @@
   function renderGrid() {
     var grid = document.getElementById('tile-grid');
     if (wt.off) {
-      grid.innerHTML = '<div class="tile now"><div class="eyebrow ink">Today</div><div class="ttask">Happy Sunday, Leni! Enjoy your day off 🎉</div></div>';
+      grid.innerHTML = '<div class="tile now"><div class="eyebrow ink">' + ui('today') + '</div><div class="ttask">' + ui('happySunday') + '</div></div>';
       return;
     }
     var tiles = '';
     if (currentIdx !== -1) {
       var cur = TIMELINE[currentIdx];
-      tiles += '<div class="tile now"><div class="eyebrow">Right Now</div><div class="ttask">' + cur.emoji + ' ' + cur.task + '</div><div class="tsub">Until ' + fmt(cur.end) + '</div></div>';
+      tiles += '<div class="tile now"><div class="eyebrow">' + ui('rightNow') + '</div><div class="ttask">' + cur.emoji + ' ' + pick(cur, 'task') + '</div><div class="tsub">' + ui('until') + fmt(cur.end) + '</div></div>';
     } else if (nowMin < TIMELINE[0].start) {
-      tiles += '<div class="tile now"><div class="eyebrow ink">Not Started Yet</div><div class="ttask">The first job today: ' + TIMELINE[0].task + '</div><div class="tsub">Starts at ' + fmt(TIMELINE[0].start) + '</div></div>';
+      tiles += '<div class="tile now"><div class="eyebrow ink">' + ui('notStartedYet') + '</div><div class="ttask">' + ui('firstJobToday') + pick(TIMELINE[0], 'task') + '</div><div class="tsub">' + ui('startsAt') + fmt(TIMELINE[0].start) + '</div></div>';
     } else {
-      tiles += '<div class="tile now"><div class="eyebrow ink">Day Complete</div><div class="ttask">See you tomorrow! 💛</div></div>';
+      tiles += '<div class="tile now"><div class="eyebrow ink">' + ui('dayComplete') + '</div><div class="ttask">' + ui('seeYouTomorrow') + '</div></div>';
     }
     if (nextIdx !== -1) {
-      tiles += '<div class="tile"><div class="eyebrow sm ink">Up Next</div><div class="ttask">' + TIMELINE[nextIdx].emoji + ' ' + TIMELINE[nextIdx].task + '</div><div class="tsub">' + fmt(TIMELINE[nextIdx].start) + '</div></div>';
+      tiles += '<div class="tile"><div class="eyebrow sm ink">' + ui('upNext') + '</div><div class="ttask">' + TIMELINE[nextIdx].emoji + ' ' + pick(TIMELINE[nextIdx], 'task') + '</div><div class="tsub">' + fmt(TIMELINE[nextIdx].start) + '</div></div>';
     }
     var dogDone = isPeriodicDone('dogfood', 7);
-    tiles += '<div class="tile streak" id="streak-tile"><div class="eyebrow sm streak">🐾 Once A Week</div><div class="ttask">Cook dog food for the whole week</div><div class="tsub">One batch today, enough for all 7 days. <a class="cooklink" href="Kitchen.html#task-dogfood">🧊 How to store it safely &rarr;</a></div><label class="dogcheckrow"><input type="checkbox" id="dogfood-check" ' + (dogDone ? 'checked' : '') + '><span>Done, the dog\'s food is cooked and stored</span></label></div>';
+    tiles += '<div class="tile streak" id="streak-tile"><div class="eyebrow sm streak">' + ui('onceAWeek') + '</div><div class="ttask">' + ui('cookDogFood') + '</div><div class="tsub">' + ui('oneBatch') + '<a class="cooklink" href="Kitchen.html#task-dogfood">' + ui('storeItSafely') + ui('arrow') + '</a></div><label class="dogcheckrow"><input type="checkbox" id="dogfood-check" ' + (dogDone ? 'checked' : '') + '><span>' + ui('dogfoodDone') + '</span></label></div>';
     grid.innerHTML = tiles;
     if (dow === 6) document.getElementById('streak-tile').style.display = 'block';
     document.getElementById('dogfood-check').addEventListener('change', function() {
@@ -386,24 +424,24 @@
       var row = document.createElement('div');
       row.className = 'trow' + (i === currentIdx ? ' now' : '') + (done ? ' done' : '');
       var timeLabel = isPointEvent ? fmt(b.start) : (fmt(b.start) + ' to ' + fmt(b.end));
-      var cookHtml = (b.cook && !isPointEvent) ? '<a class="cooklink" href="' + MEAL_PLANNER + '" target="_blank" rel="noopener">🍽️ See the recipe in Meal Planner</a>' : '';
+      var cookHtml = (b.cook && !isPointEvent) ? '<a class="cooklink" href="' + MEAL_PLANNER + '" target="_blank" rel="noopener">' + ui('recipeLink') + '</a>' : '';
       var extraHtml = '';
       if (b.extraJobHere && !wt.off) {
         if (wt.monthly) {
           // Saturday's extra is the monthly rotation; those tasks have their own checkboxes below
-          extraHtml = '<div class="extraflag"><div class="extraflagrow"><span class="dot"></span><span class="extratext">Also today: ' + wt.html + '</span></div>' + linkRow(wt.links) + '</div>';
+          extraHtml = '<div class="extraflag"><div class="extraflagrow"><span class="dot"></span><span class="extratext">' + ui('alsoToday') + pick(wt, 'html') + '</span></div>' + linkRow(wt.links) + '</div>';
         } else {
           var extraDone = checks['extra'] === true;
-          extraHtml = '<div class="extraflag' + (extraDone ? ' done' : '') + '" id="extra-flag"><div class="extraflagrow"><input type="checkbox" class="extracheck" ' + (extraDone ? 'checked' : '') + '><span class="extratext">Also today: ' + wt.html + '</span></div>' + linkRow(wt.links) + '</div>';
+          extraHtml = '<div class="extraflag' + (extraDone ? ' done' : '') + '" id="extra-flag"><div class="extraflagrow"><input type="checkbox" class="extracheck" ' + (extraDone ? 'checked' : '') + '><span class="extratext">' + ui('alsoToday') + pick(wt, 'html') + '</span></div>' + linkRow(wt.links) + '</div>';
         }
       }
       row.innerHTML =
         (isPointEvent ? '' : '<input type="checkbox" class="rowcheck" data-id="' + b.id + '" ' + (done ? 'checked' : '') + '>') +
         '<span class="temoji">' + b.emoji + '</span>' +
         '<div class="tinfo">' +
-          '<div class="ttime">' + timeLabel + (i === currentIdx ? '<span class="tnowbadge">Now</span>' : '') + '</div>' +
-          '<div class="ttask">' + b.task + '</div>' +
-          (b.sub ? '<div class="tsub">' + b.sub + '</div>' : '') +
+          '<div class="ttime">' + timeLabel + (i === currentIdx ? '<span class="tnowbadge">' + ui('now') + '</span>' : '') + '</div>' +
+          '<div class="ttask">' + pick(b, 'task') + '</div>' +
+          (b.sub ? '<div class="tsub">' + pick(b, 'sub') + '</div>' : '') +
           cookHtml +
           extraHtml +
         '</div>';
@@ -440,15 +478,16 @@
 
   function renderWeekGrid() {
     var weekEl = document.getElementById('week-grid');
+    weekEl.innerHTML = '';
     [1,2,3,4,5,6,0].forEach(function(d) {
       var t = WEEKDAY_TASKS[d];
       var card = document.createElement('div');
       if (t.off) {
         card.className = 'dayoff';
-        card.innerHTML = t.name + ': day off';
+        card.innerHTML = pick(t, 'name') + ui('dayOff');
       } else {
         card.className = 'weekcard' + (d === dow ? ' today' : '');
-        card.innerHTML = '<div class="wtitle">' + t.name + '</div><div class="wtask">' + t.html + linkRow(t.links) + '</div>';
+        card.innerHTML = '<div class="wtitle">' + pick(t, 'name') + '</div><div class="wtask">' + pick(t, 'html') + linkRow(t.links) + '</div>';
       }
       weekEl.appendChild(card);
     });
@@ -479,14 +518,14 @@
         if (t.id) {
           li.className = 'monthtask' + (done ? ' done' : '');
           li.innerHTML = '<input type="checkbox" class="monthcheck" data-id="' + t.id + '" ' + (done ? 'checked' : '') + '>' +
-            '<span class="mtext">' + t.t + linkHtml + '</span>';
+            '<span class="mtext">' + pick(t, 't') + linkHtml + '</span>';
         } else {
           li.className = 'monthtask';
-          li.innerHTML = '<span class="mtext" style="margin-left:25px;">' + t.t + linkHtml + '</span>';
+          li.innerHTML = '<span class="mtext" style="margin-left:25px;">' + pick(t, 't') + linkHtml + '</span>';
         }
         ul.appendChild(li);
       });
-      card.innerHTML = '<div class="weeklabel">Week ' + (idx + 1) + (idx + 1 === cycleWeek ? ' (this week)' : '') + '</div>';
+      card.innerHTML = '<div class="weeklabel">' + ui('week') + (idx + 1) + (idx + 1 === cycleWeek ? ui('thisWeekSuffix') : '') + '</div>';
       card.appendChild(ul);
       monthEl.appendChild(card);
     });
@@ -505,6 +544,14 @@
   });
   renderExtraTasks();
   renderWeekGrid();
+
+  HH_i18n.onChange(function() {
+    document.getElementById('today-date').textContent = fmtDateLong(now);
+    renderGrid();
+    renderTimeline();
+    renderWeekGrid();
+    renderMonthGrid();
+  });
 
   var openState = [];
   window.addEventListener('beforeprint', function() {
