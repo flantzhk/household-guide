@@ -52,17 +52,18 @@
   }
   .previewbtn:hover { background: var(--jade); color: #fff; }
 
-  .progresscard { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-raised); padding: 20px 22px; margin-top: 16px; }
+  .statusrow { display: flex; gap: 10px; margin-top: 16px; align-items: stretch; }
+  .progresscard { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-raised); padding: 20px 22px; flex: 1.6; }
   .progresscard .ptask { font-family: var(--font-serif); font-weight: 600; font-size: 1.5rem; color: var(--fg-0); }
   .progressbar { height: 8px; background: var(--bg-3); margin-top: 12px; overflow: hidden; }
   .progressbar .fill { height: 100%; background: var(--jade); transition: width 0.3s ease; }
   .progresscard .pcount { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); margin-top: 8px; }
 
-  .tilegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-  .tile { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-card); padding: 16px 18px; }
+  .tilegrid { display: flex; flex: 1; }
+  .tile { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-card); padding: 16px 18px; flex: 1; }
   .tile .ttask { font-family: var(--font-serif); font-weight: 600; font-size: 1rem; color: var(--fg-0); margin: 2px 0 3px 0; }
   .tile .tsub { font-family: var(--font-ui); font-size: 0.78125rem; color: var(--fg-2); }
-  @media (max-width: 480px) { .tilegrid { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .statusrow { flex-direction: column; } }
 
   .extraflag { display: flex; align-items: flex-start; gap: 8px; margin-top: 6px; font-family: var(--font-ui); font-size: 0.78125rem; color: var(--jade); line-height: 1.5; }
   .extraflag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--jade); flex-shrink: 0; margin-top: 6px; }
@@ -150,14 +151,16 @@
     </div>
   </div>
 
-  <div class="progresscard">
-    <div class="eyebrow ink sm">Right Now</div>
-    <div class="ptask" id="progress-task">Loading…</div>
-    <div class="progressbar"><div class="fill" id="progress-fill" style="width:0%"></div></div>
-    <div class="pcount" id="progress-count">Loading today's progress…</div>
-  </div>
+  <div class="statusrow">
+    <div class="progresscard">
+      <div class="eyebrow ink sm">Right Now</div>
+      <div class="ptask" id="progress-task">Loading…</div>
+      <div class="progressbar"><div class="fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="pcount" id="progress-count">Loading today's progress…</div>
+    </div>
 
-  <div class="tilegrid" id="tile-grid"></div>
+    <div class="tilegrid" id="tile-grid"></div>
+  </div>
 
   <div id="extra-tasks-section">
     <div class="edibar"><span class="num">01</span><span class="label">Extra Tasks From Faith</span></div>
