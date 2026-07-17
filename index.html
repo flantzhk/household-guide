@@ -151,6 +151,7 @@
     <div class="eyebrow ink">For Leni</div>
     <h1 id="greeting-h1">Hi Leni! 👋</h1>
     <div class="greeting">Here's today's schedule. Thank you for everything you do for our home! 💛</div>
+    <div class="metaline" id="today-date"></div>
     <div class="metaline">Working hours: Monday to Saturday, 7am to 7pm.</div>
   </div>
 
@@ -181,17 +182,17 @@
 
   <details class="detailsbox">
     <summary>Full week: Monday to Saturday</summary>
-    <div class="detailssub">Every day's cleaning block also covers that day's rotating task, on top of your usual daily list. Sunday is your day off.</div>
+    <div class="detailssub">Every day, do the normal cleaning list. Some days also have one extra job, shown below. Sunday is your day off.</div>
     <div id="week-grid"></div>
   </details>
 
   <details class="detailsbox">
     <summary>The once-a-month tasks</summary>
-    <div class="detailssub">These are spread across 4 Saturdays so it cycles roughly every month instead of piling up on one day.</div>
+    <div class="detailssub">These jobs happen on different Saturdays, one at a time. This way, they do not build up.</div>
     <div class="monthgrid" id="month-grid"></div>
   </details>
 
-  <footer>Daily Schedule for Leni · v12</footer>
+  <footer>Daily Schedule for Leni · v13</footer>
 </div>
 
 <script>
@@ -236,7 +237,7 @@
          links: [{ label: 'Bathroom towels', url: 'Bathroom.html#task-towels' }] },
     5: { name: 'Friday', html: 'Living/Dining: check sofa covers, deep-dust shelves, wipe the piano, vacuum under &amp; behind the sofa, lift &amp; vacuum under the rug',
          links: [{ label: 'Sofa covers', url: 'living-dining.html#task-sofacovers' }, { label: 'Shelves', url: 'living-dining.html#task-shelves' }, { label: 'Piano', url: 'living-dining.html#task-piano' }, { label: 'Vacuum sofa & rug', url: 'living-dining.html#task-vacuumsofa' }] },
-    6: { name: 'Saturday', html: 'Rotate through the "Once In A While" tasks, see below', monthly: true },
+    6: { name: 'Saturday', html: 'Do one of the "Once In A While" tasks below', monthly: true },
     0: { name: 'Sunday', off: true }
   };
 
@@ -251,7 +252,7 @@
      { id: 'waterdispenser', t: 'Kitchen: descale the water dispenser (only if the light is on)', url: 'Kitchen.html#task-waterdispenser' },
      { id: 'pianolegs', t: 'Living/Dining: dust the piano legs, pedals &amp; bench', url: 'living-dining.html#task-pianolegs' }],
     [{ id: 'airpurifier', t: 'Bedroom: clean the air purifier', url: 'Bedroom.html#task-airpurifier' },
-     { t: 'Catch-up: anything skipped the last 3 weeks', url: null }]
+     { t: 'Extra: anything you missed in the last 3 weeks', url: null }]
   ];
 
   function linkRow(links) {
@@ -270,12 +271,19 @@
     return 1 + Math.round(diff / 7);
   }
 
+  var WEEKDAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function fmtDateLong(d) {
+    return WEEKDAY_NAMES[d.getDay()] + ', ' + d.getDate() + ' ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
   var now = new Date();
   var nowMin = now.getHours() * 60 + now.getMinutes();
   var dow = now.getDay();
   var wt = WEEKDAY_TASKS[dow];
   var cycleWeek = ((getISOWeek(now) - 1) % 4) + 1;
   var todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+  document.getElementById('today-date').textContent = fmtDateLong(now);
 
   var currentIdx = -1, nextIdx = -1;
   for (var i = 0; i < TIMELINE.length; i++) {
@@ -323,14 +331,14 @@
       var cur = TIMELINE[currentIdx];
       tiles += '<div class="tile now"><div class="eyebrow">Right Now</div><div class="ttask">' + cur.emoji + ' ' + cur.task + '</div><div class="tsub">Until ' + fmt(cur.end) + '</div></div>';
     } else if (nowMin < TIMELINE[0].start) {
-      tiles += '<div class="tile now"><div class="eyebrow ink">Not Started Yet</div><div class="ttask">First up: ' + TIMELINE[0].task + '</div><div class="tsub">Starts at ' + fmt(TIMELINE[0].start) + '</div></div>';
+      tiles += '<div class="tile now"><div class="eyebrow ink">Not Started Yet</div><div class="ttask">The first job today: ' + TIMELINE[0].task + '</div><div class="tsub">Starts at ' + fmt(TIMELINE[0].start) + '</div></div>';
     } else {
       tiles += '<div class="tile now"><div class="eyebrow ink">Day Complete</div><div class="ttask">See you tomorrow! 💛</div></div>';
     }
     if (nextIdx !== -1) {
       tiles += '<div class="tile"><div class="eyebrow sm ink">Up Next</div><div class="ttask">' + TIMELINE[nextIdx].emoji + ' ' + TIMELINE[nextIdx].task + '</div><div class="tsub">' + fmt(TIMELINE[nextIdx].start) + '</div></div>';
     }
-    tiles += '<div class="tile streak" id="streak-tile"><div class="eyebrow sm streak">🐾 Weekly, Not Tracked</div><div class="ttask">Cook a batch of dog food this week</div><div class="tsub">No box to check, just get it done when you can 😊</div></div>';
+    tiles += '<div class="tile streak" id="streak-tile"><div class="eyebrow sm streak">🐾 Weekly, Not Tracked</div><div class="ttask">Cook dog food for the week</div><div class="tsub">There is no box to check. Just do it sometime this week 😊</div></div>';
     grid.innerHTML = tiles;
     if (dow === 6) document.getElementById('streak-tile').style.display = 'block';
   }

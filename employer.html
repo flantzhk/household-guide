@@ -86,6 +86,26 @@
   .cstatus.overdue { background: var(--accent-dark); color: var(--accent); }
   .cstatus.noschedule { background: var(--bg-2); color: var(--fg-2); }
 
+  .historycontrols { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .historydateinput { font-family: var(--font-ui); font-size: 0.8125rem; padding: 8px 12px; border: 1.5px solid var(--bg-3); background: var(--bg-1); color: var(--fg-0); }
+  .quickpills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .quickpill {
+    font-family: var(--font-mono); font-size: 0.625rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 7px 11px; border: 1.5px solid var(--bg-3); background: var(--bg-1); color: var(--fg-1); cursor: pointer;
+  }
+  .quickpill:hover { border-color: var(--accent); color: var(--accent); }
+  .quickpill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .historysummary { font-family: var(--font-ui); font-size: 0.875rem; font-weight: 600; color: var(--fg-0); margin-bottom: 10px; }
+  .historysummary.hasgaps { color: var(--accent); }
+  .historyrow { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--bg-3); }
+  .historyrow:last-child { border-bottom: none; }
+  .hstatus { width: 20px; height: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.8125rem; border: 1.5px solid var(--bg-3); color: transparent; }
+  .historyrow.done .hstatus { background: var(--jade); border-color: var(--jade); color: #fff; }
+  .historyrow.skipped .hstatus { border-color: var(--accent); }
+  .historyrow.skipped .htask { color: var(--accent); }
+  .htask { font-family: var(--font-ui); font-size: 0.875rem; font-weight: 600; color: var(--fg-0); }
+  .dayoffnote { font-family: var(--font-ui); font-size: 0.875rem; color: var(--fg-2); font-style: italic; padding: 12px 0; }
+
   footer { margin-top: 40px; font-family: var(--font-mono); font-size: 0.65625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
   .backlink { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); text-decoration: none; }
   .backlink:hover { color: var(--accent); }
@@ -101,6 +121,7 @@
       <div class="eyebrow">Employer View</div>
       <h1>Today's Progress</h1>
       <div class="metaline">What Leni has checked off so far today.</div>
+      <div class="metaline" id="today-date"></div>
     </div>
     <button class="refreshbtn" id="refresh-btn">🔄 Refresh</button>
   </div>
@@ -128,6 +149,17 @@
     <div class="edibar"><span class="num">03</span><span class="label">Once-in-a-While Tasks</span></div>
     <div class="metaline" style="margin-bottom: 12px;">When each deep-clean task was last checked done, so you can review compliance without relying on memory (yours or Leni's).</div>
     <div id="compliance-list"></div>
+  </div>
+
+  <div id="history-section">
+    <div class="edibar"><span class="num">04</span><span class="label">Day-by-Day History</span></div>
+    <div class="metaline" style="margin-bottom: 12px;">Pick a day to see exactly what was checked off and what wasn't. Note: this only shows what Leni tapped on the timeline that day, an unchecked box could mean it wasn't done, or that the page just wasn't opened.</div>
+    <div class="historycontrols">
+      <input type="date" class="historydateinput" id="history-date">
+      <div class="quickpills" id="history-quickpills"></div>
+    </div>
+    <div id="history-summary" class="historysummary"></div>
+    <div id="history-list"></div>
   </div>
 
   <footer><a class="backlink" href="index.html">&larr; Leni's page</a> &middot; Today's Progress, Employer View</footer>
@@ -173,11 +205,21 @@
     0: { name: 'Sunday', off: true }
   };
 
+  var WEEKDAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function fmtDateLong(d) {
+    return WEEKDAY_NAMES[d.getDay()] + ', ' + d.getDate() + ' ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function dateStrOf(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
   var now = new Date();
   var nowMin = now.getHours() * 60 + now.getMinutes();
   var dow = now.getDay();
   var wt = WEEKDAY_TASKS[dow];
-  var todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+  var todayStr = dateStrOf(now);
+  document.getElementById('today-date').textContent = fmtDateLong(now);
 
   var currentIdx = -1, nextIdx = -1;
   for (var i = 0; i < TIMELINE.length; i++) {
@@ -273,6 +315,72 @@
     });
   }
 
+  // ---- Day-by-day history: every day's checks live at checks:YYYY-MM-DD and are never overwritten,
+  // so past days are already preserved, this just adds a way to browse them ----
+  function loadHistory(dateStr) {
+    document.querySelectorAll('.quickpill').forEach(function(p) { p.classList.toggle('active', p.dataset.date === dateStr); });
+    var d = new Date(dateStr + 'T00:00:00');
+    var listEl = document.getElementById('history-list');
+    var summaryEl = document.getElementById('history-summary');
+    if (d.getDay() === 0) {
+      summaryEl.textContent = '';
+      summaryEl.className = 'historysummary';
+      listEl.innerHTML = '<div class="dayoffnote">' + fmtDateLong(d) + ' was a Sunday, Leni\'s day off. Nothing was scheduled.</div>';
+      return;
+    }
+    summaryEl.textContent = 'Loading…';
+    listEl.innerHTML = '';
+    fetch(API + '/checks/' + dateStr)
+      .then(function(r) { return r.json(); })
+      .then(function(checks) {
+        checks = checks || {};
+        var doneCount = 0;
+        listEl.innerHTML = '';
+        checkable.forEach(function(b) {
+          var done = checks[b.id] === true;
+          if (done) doneCount++;
+          var row = document.createElement('div');
+          row.className = 'historyrow' + (done ? ' done' : ' skipped');
+          row.innerHTML = '<div class="hstatus">' + (done ? '✓' : '') + '</div>' +
+            '<span class="temoji">' + b.emoji + '</span>' +
+            '<div class="tinfo"><div class="htask">' + b.task + '</div></div>';
+          listEl.appendChild(row);
+        });
+        var skipped = checkable.length - doneCount;
+        summaryEl.textContent = fmtDateLong(d) + ': ' + doneCount + ' of ' + checkable.length + ' done' + (skipped ? ', ' + skipped + ' skipped' : ', nothing skipped');
+        summaryEl.className = 'historysummary' + (skipped ? ' hasgaps' : '');
+      })
+      .catch(function() {
+        summaryEl.textContent = 'Could not load ' + dateStr + ' right now.';
+        summaryEl.className = 'historysummary hasgaps';
+      });
+  }
+
+  function initHistory() {
+    var dateInput = document.getElementById('history-date');
+    dateInput.max = todayStr;
+    dateInput.value = todayStr;
+    var pillsEl = document.getElementById('history-quickpills');
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(now);
+      d.setDate(d.getDate() - i);
+      var ds = dateStrOf(d);
+      var label = i === 0 ? 'Today' : (i === 1 ? 'Yesterday' : WEEKDAY_NAMES[d.getDay()].slice(0, 3) + ' ' + d.getDate());
+      var pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = 'quickpill';
+      pill.dataset.date = ds;
+      pill.textContent = label;
+      pill.addEventListener('click', function() {
+        dateInput.value = this.dataset.date;
+        loadHistory(this.dataset.date);
+      });
+      pillsEl.appendChild(pill);
+    }
+    dateInput.addEventListener('change', function() { loadHistory(dateInput.value); });
+    loadHistory(todayStr);
+  }
+
   function load() {
     document.getElementById('progress-count').textContent = 'Loading…';
     fetch(API + '/checks/' + todayStr)
@@ -287,6 +395,7 @@
 
   document.getElementById('refresh-btn').addEventListener('click', load);
   load();
+  initHistory();
 })();
 </script>
 </body>
