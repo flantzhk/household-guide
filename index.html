@@ -193,7 +193,7 @@
     <div class="monthgrid" id="month-grid"></div>
   </details>
 
-  <footer>Daily Schedule for Leni · v13</footer>
+  <footer>Daily Schedule for Leni · v14</footer>
 </div>
 
 <script>
@@ -339,7 +339,7 @@
     if (nextIdx !== -1) {
       tiles += '<div class="tile"><div class="eyebrow sm ink">Up Next</div><div class="ttask">' + TIMELINE[nextIdx].emoji + ' ' + TIMELINE[nextIdx].task + '</div><div class="tsub">' + fmt(TIMELINE[nextIdx].start) + '</div></div>';
     }
-    tiles += '<div class="tile streak" id="streak-tile"><div class="eyebrow sm streak">🐾 Weekly, Not Tracked</div><div class="ttask">Cook dog food for the week</div><div class="tsub">There is no box to check. Just do it sometime this week 😊</div></div>';
+    tiles += '<div class="tile streak" id="streak-tile"><div class="eyebrow sm streak">🐾 Weekly, Not Tracked</div><div class="ttask">Cook dog food for the whole week</div><div class="tsub">One batch today, enough for all 7 days. No box to check here. <a class="cooklink" href="Kitchen.html#task-dogfood">🧊 How to store it safely &rarr;</a></div></div>';
     grid.innerHTML = tiles;
     if (dow === 6) document.getElementById('streak-tile').style.display = 'block';
   }
