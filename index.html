@@ -197,7 +197,7 @@
     <div class="monthgrid" id="month-grid"></div>
   </details>
 
-  <footer>Daily Schedule for Leni · v16</footer>
+  <footer>Daily Schedule for Leni · v17</footer>
 </div>
 
 <script src="i18n.js"></script>
@@ -331,7 +331,7 @@
   // Preview mode: for Faith (or testing) peeking at Leni's exact view without it
   // counting as a real visit. Suppresses the heartbeat and all saves; checkboxes
   // still respond visually but nothing reaches the server.
-  var isPreview = /[?&]preview=1\b/.test(location.search);
+  var isPreview = new URLSearchParams(location.search).has('preview');
   if (isPreview) {
     var pbar = document.createElement('div');
     pbar.style.cssText = 'background:var(--fg-0);color:var(--bg-0);font-family:var(--font-mono);font-size:0.65625rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;text-align:center;padding:9px;';

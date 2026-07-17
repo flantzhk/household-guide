@@ -44,6 +44,13 @@
   }
   .refreshbtn:hover { border-color: var(--accent); color: var(--accent); }
   .refreshbtn:active { transform: translateY(1px); }
+  .btnrow { display: flex; gap: 8px; flex-shrink: 0; }
+  .previewbtn {
+    font-family: var(--font-ui); font-size: 0.8125rem; font-weight: 600; color: var(--jade);
+    background: var(--jade-soft); border: 1.5px solid var(--jade); padding: 10px 18px;
+    text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap;
+  }
+  .previewbtn:hover { background: var(--jade); color: #fff; }
 
   .progresscard { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-raised); padding: 20px 22px; margin-top: 16px; }
   .progresscard .ptask { font-family: var(--font-serif); font-weight: 600; font-size: 1.5rem; color: var(--fg-0); }
@@ -137,7 +144,10 @@
       <div class="metaline">What Leni has checked off so far today.</div>
       <div class="metaline" id="today-date"></div>
     </div>
-    <button class="refreshbtn" id="refresh-btn">🔄 Refresh</button>
+    <div class="btnrow">
+      <a class="previewbtn" href="index.html?preview=1" target="_blank" rel="noopener">👁️ Preview Leni's Page</a>
+      <button class="refreshbtn" id="refresh-btn">🔄 Refresh</button>
+    </div>
   </div>
 
   <div class="progresscard">
