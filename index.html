@@ -68,6 +68,10 @@
   .extraflagrow { display: flex; align-items: flex-start; gap: 8px; }
   .extraflag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--jade); flex-shrink: 0; margin-top: 7px; }
   .extraflag .linkrow { margin-top: 8px; margin-left: 13px; }
+  .extracheck { width: 17px; height: 17px; accent-color: var(--jade); cursor: pointer; flex-shrink: 0; margin-top: 1px; }
+  .extraflag.done .extratext { text-decoration: line-through; opacity: 0.65; }
+  .dogcheckrow { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-family: var(--font-ui); font-size: 0.8125rem; font-weight: 600; color: var(--fg-1); cursor: pointer; }
+  .dogcheckrow input { width: 18px; height: 18px; accent-color: var(--jade); cursor: pointer; }
 
   .edibar { display: flex; align-items: baseline; gap: 10px; border-top: 6px solid var(--fg-0); padding-top: 12px; margin: 34px 0 16px 0; }
   .edibar .num { font-family: var(--font-serif); font-style: italic; font-size: 0.9375rem; color: var(--accent); }
@@ -193,7 +197,7 @@
     <div class="monthgrid" id="month-grid"></div>
   </details>
 
-  <footer>Daily Schedule for Leni · v14</footer>
+  <footer>Daily Schedule for Leni · v15</footer>
 </div>
 
 <script>
@@ -286,6 +290,13 @@
   var todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   document.getElementById('today-date').textContent = fmtDateLong(now);
 
+  // Heartbeat: tell the server this page was opened today, so Faith's view can tell
+  // "task skipped" apart from "the page was never opened". Fire-and-forget.
+  fetch(API + '/opened/' + todayStr, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ time: String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') })
+  }).catch(function() {});
+
   var currentIdx = -1, nextIdx = -1;
   for (var i = 0; i < TIMELINE.length; i++) {
     var b = TIMELINE[i];
@@ -339,9 +350,13 @@
     if (nextIdx !== -1) {
       tiles += '<div class="tile"><div class="eyebrow sm ink">Up Next</div><div class="ttask">' + TIMELINE[nextIdx].emoji + ' ' + TIMELINE[nextIdx].task + '</div><div class="tsub">' + fmt(TIMELINE[nextIdx].start) + '</div></div>';
     }
-    tiles += '<div class="tile streak" id="streak-tile"><div class="eyebrow sm streak">🐾 Weekly, Not Tracked</div><div class="ttask">Cook dog food for the whole week</div><div class="tsub">One batch today, enough for all 7 days. No box to check here. <a class="cooklink" href="Kitchen.html#task-dogfood">🧊 How to store it safely &rarr;</a></div></div>';
+    var dogDone = isPeriodicDone('dogfood', 7);
+    tiles += '<div class="tile streak" id="streak-tile"><div class="eyebrow sm streak">🐾 Once A Week</div><div class="ttask">Cook dog food for the whole week</div><div class="tsub">One batch today, enough for all 7 days. <a class="cooklink" href="Kitchen.html#task-dogfood">🧊 How to store it safely &rarr;</a></div><label class="dogcheckrow"><input type="checkbox" id="dogfood-check" ' + (dogDone ? 'checked' : '') + '><span>Done, the dog\'s food is cooked and stored</span></label></div>';
     grid.innerHTML = tiles;
     if (dow === 6) document.getElementById('streak-tile').style.display = 'block';
+    document.getElementById('dogfood-check').addEventListener('change', function() {
+      savePeriodic('dogfood', this.checked);
+    });
   }
 
   function renderTimeline() {
@@ -357,7 +372,16 @@
       row.className = 'trow' + (i === currentIdx ? ' now' : '') + (done ? ' done' : '');
       var timeLabel = isPointEvent ? fmt(b.start) : (fmt(b.start) + ' to ' + fmt(b.end));
       var cookHtml = (b.cook && !isPointEvent) ? '<a class="cooklink" href="' + MEAL_PLANNER + '" target="_blank" rel="noopener">🍽️ See the recipe in Meal Planner</a>' : '';
-      var extraHtml = (b.extraJobHere && !wt.off) ? ('<div class="extraflag"><div class="extraflagrow"><span class="dot"></span><span>Also today: ' + wt.html + '</span></div>' + linkRow(wt.links) + '</div>') : '';
+      var extraHtml = '';
+      if (b.extraJobHere && !wt.off) {
+        if (wt.monthly) {
+          // Saturday's extra is the monthly rotation; those tasks have their own checkboxes below
+          extraHtml = '<div class="extraflag"><div class="extraflagrow"><span class="dot"></span><span class="extratext">Also today: ' + wt.html + '</span></div>' + linkRow(wt.links) + '</div>';
+        } else {
+          var extraDone = checks['extra'] === true;
+          extraHtml = '<div class="extraflag' + (extraDone ? ' done' : '') + '" id="extra-flag"><div class="extraflagrow"><input type="checkbox" class="extracheck" ' + (extraDone ? 'checked' : '') + '><span class="extratext">Also today: ' + wt.html + '</span></div>' + linkRow(wt.links) + '</div>';
+        }
+      }
       row.innerHTML =
         (isPointEvent ? '' : '<input type="checkbox" class="rowcheck" data-id="' + b.id + '" ' + (done ? 'checked' : '') + '>') +
         '<span class="temoji">' + b.emoji + '</span>' +
@@ -375,6 +399,13 @@
           saveCheck(b.id, cb.checked);
           row.classList.toggle('done', cb.checked);
         });
+        var ecb = row.querySelector('.extracheck');
+        if (ecb) {
+          ecb.addEventListener('change', function() {
+            saveCheck('extra', ecb.checked);
+            document.getElementById('extra-flag').classList.toggle('done', ecb.checked);
+          });
+        }
       }
     });
   }
@@ -409,12 +440,12 @@
   }
 
   var PERIODIC_FRESH_DAYS = 30;
-  function isPeriodicDone(id) {
+  function isPeriodicDone(id, freshDays) {
     var task = periodic[id];
     if (!task || !task.lastDone) return false;
     var last = new Date(task.lastDone + 'T00:00:00');
     var daysSince = Math.floor((now - last) / 86400000);
-    return daysSince < PERIODIC_FRESH_DAYS;
+    return daysSince < (freshDays || PERIODIC_FRESH_DAYS);
   }
 
   function renderMonthGrid() {
@@ -452,11 +483,11 @@
     });
   }
 
-  loadChecks().then(function() {
+  Promise.all([loadChecks(), loadPeriodic()]).then(function() {
     renderGrid();
     renderTimeline();
+    renderMonthGrid();
   });
-  loadPeriodic().then(renderMonthGrid);
   renderExtraTasks();
   renderWeekGrid();
 

@@ -104,8 +104,21 @@
   .historyrow.done .hstatus { background: var(--jade); border-color: var(--jade); color: #fff; }
   .historyrow.skipped .hstatus { border-color: var(--accent); }
   .historyrow.skipped .htask { color: var(--accent); }
+  .historyrow.pending .hstatus { border-style: dashed; }
+  .historyrow.pending .htask { color: var(--fg-3); }
   .htask { font-family: var(--font-ui); font-size: 0.875rem; font-weight: 600; color: var(--fg-0); }
   .dayoffnote { font-family: var(--font-ui); font-size: 0.875rem; color: var(--fg-2); font-style: italic; padding: 12px 0; }
+
+  .weekgridwrap { overflow-x: auto; background: var(--bg-1); border: 1px solid var(--bg-3); padding: 8px; }
+  .weekgrid { border-collapse: collapse; width: 100%; font-family: var(--font-ui); }
+  .weekgrid th { font-family: var(--font-mono); font-size: 0.625rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--fg-2); padding: 6px 4px; text-align: center; border-bottom: 2px solid var(--bg-3); }
+  .weekgrid th.gtoday { color: var(--accent); }
+  .weekgrid td { text-align: center; padding: 5px 4px; font-size: 0.75rem; border-bottom: 1px solid var(--bg-2); min-width: 34px; }
+  .weekgrid .tasklabel { text-align: left; font-family: var(--font-ui); font-size: 0.75rem; font-weight: 600; color: var(--fg-1); text-transform: none; letter-spacing: 0; padding-left: 6px; white-space: nowrap; }
+  .weekgrid td.gdone { color: var(--jade); font-weight: 700; }
+  .weekgrid td.gskip { color: var(--accent); font-weight: 700; background: var(--accent-muted); }
+  .weekgrid td.goff { color: var(--fg-3); background: var(--bg-2); }
+  .weekgrid td.gpend { color: var(--fg-3); }
 
   footer { margin-top: 40px; font-family: var(--font-mono); font-size: 0.65625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
   .backlink { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); text-decoration: none; }
@@ -154,13 +167,19 @@
 
   <div id="history-section">
     <div class="edibar"><span class="num">04</span><span class="label">Day-by-Day History</span></div>
-    <div class="metaline" style="margin-bottom: 12px;">Pick a day to see exactly what was checked off and what wasn't. Note: this only shows what Leni tapped on the timeline that day, an unchecked box could mean it wasn't done, or that the page just wasn't opened.</div>
+    <div class="metaline" style="margin-bottom: 12px;">Pick a day to see exactly what was checked off and what wasn't. If the schedule page was never opened that day, it says so, instead of counting everything as skipped.</div>
     <div class="historycontrols">
       <input type="date" class="historydateinput" id="history-date">
       <div class="quickpills" id="history-quickpills"></div>
     </div>
     <div id="history-summary" class="historysummary"></div>
     <div id="history-list"></div>
+  </div>
+
+  <div id="weekgrid-section">
+    <div class="edibar"><span class="num">05</span><span class="label">Last 7 Days at a Glance</span></div>
+    <div class="metaline" style="margin-bottom: 12px;">Patterns across the week: ✓ done, ✕ not checked, ? the page was never opened that day, − not scheduled. Today's column stops at the current time, tasks later today show a dot.</div>
+    <div class="weekgridwrap"><table class="weekgrid"><thead id="weekgrid-head"></thead><tbody id="weekgrid-body"></tbody></table></div>
   </div>
 
   <footer><a class="backlink" href="index.html">&larr; Leni's page</a> &middot; Today's Progress, Employer View</footer>
@@ -202,7 +221,7 @@
     3: { name: 'Wednesday', html: "Kitchen: deep-clean the fridge" },
     4: { name: 'Thursday', html: "Fresh towels, bath mat, ironing" },
     5: { name: 'Friday', html: "Living/Dining: shelves, piano, sofa, rug" },
-    6: { name: 'Saturday', html: "Rotate through the monthly deep-clean list" },
+    6: { name: 'Saturday', html: "Rotate through the monthly deep-clean list", monthly: true },
     0: { name: 'Sunday', off: true }
   };
 
@@ -232,7 +251,26 @@
 
   var checkable = TIMELINE.filter(function(b) { return b.id; });
 
+  // The rotating Mon-Fri extra job is saved under id 'extra' in that day's checks.
+  // Saturday's extra is the monthly rotation, tracked separately in section 03.
+  var EXTRA_DEADLINE = tm(16, 40); // it happens during the afternoon cleaning block
+  function dayHasExtraJob(d) { return d >= 1 && d <= 5; }
+  var hasExtraJobToday = dayHasExtraJob(dow);
+
+  function fmtHM(hm) { // "07:04" -> "7:04 AM"
+    var p = hm.split(':');
+    return fmt(parseInt(p[0], 10) * 60 + parseInt(p[1], 10));
+  }
+
+  var SHORT_LABELS = {
+    'coffee': 'Coffee', 'walk1': 'Dog walk 1', 'breakfast': 'Breakfast', 'laundry': 'Laundry',
+    'clean-am': 'Cleaning (AM)', 'walk2': 'Dog walk 2', 'lunch-prep': 'Lunch prep', 'lunch': 'Lunch',
+    'lunch-cleanup': 'Lunch cleanup', 'clean-pm': 'Cleaning (PM)', 'walk3': 'Dog walk 3',
+    'dinner-prep': 'Dinner prep', 'dinner': 'Dinner', 'dinner-cleanup': 'Dinner cleanup', 'extra': 'Extra job'
+  };
+
   var PERIODIC_TASKS = [
+    { id: 'dogfood', label: "Cook the dog's food for the week (Saturdays)", dueSoon: 7, overdue: 9 },
     { id: 'cabinet', label: 'Bathroom: under-sink &amp; mirror cabinet shelves' },
     { id: 'rangehood', label: 'Kitchen: range hood filter' },
     { id: 'floorreset', label: 'Living/Dining: full floor reset' },
@@ -260,9 +298,9 @@
         lastText = 'Last done ' + lastDone + ' (' + daysSince + (daysSince === 1 ? ' day' : ' days') + ' ago)';
         if (task.noSchedule) {
           statusClass = 'noschedule'; statusLabel = 'No fixed schedule';
-        } else if (daysSince <= DUE_SOON_DAYS) {
+        } else if (daysSince <= (task.dueSoon || DUE_SOON_DAYS)) {
           statusClass = 'ok'; statusLabel = 'On track';
-        } else if (daysSince <= OVERDUE_DAYS) {
+        } else if (daysSince <= (task.overdue || OVERDUE_DAYS)) {
           statusClass = 'duesoon'; statusLabel = 'Due soon';
         } else {
           statusClass = 'overdue'; statusLabel = 'Overdue';
@@ -286,9 +324,11 @@
     document.getElementById('progress-task').textContent = wt.off
       ? "It's Sunday, Leni's day off"
       : (currentIdx !== -1 ? TIMELINE[currentIdx].emoji + ' ' + TIMELINE[currentIdx].task : 'Outside working hours');
-    var doneCount = checkable.filter(function(b) { return checks[b.id] === true; }).length;
-    document.getElementById('progress-fill').style.width = (checkable.length ? (doneCount / checkable.length * 100) : 0) + '%';
-    document.getElementById('progress-count').textContent = doneCount + ' of ' + checkable.length + ' tasks done so far today';
+    var extraDone = checks['extra'] === true;
+    var totalToday = checkable.length + (hasExtraJobToday ? 1 : 0);
+    var doneCount = checkable.filter(function(b) { return checks[b.id] === true; }).length + (hasExtraJobToday && extraDone ? 1 : 0);
+    document.getElementById('progress-fill').style.width = (totalToday ? (doneCount / totalToday * 100) : 0) + '%';
+    document.getElementById('progress-count').textContent = doneCount + ' of ' + totalToday + ' tasks done so far today';
 
     var grid = document.getElementById('tile-grid');
     if (nextIdx !== -1 && !wt.off) {
@@ -307,7 +347,8 @@
       var row = document.createElement('div');
       row.className = 'trow' + (done ? ' done' : '');
       var timeLabel = isPointEvent ? fmt(b.start) : (fmt(b.start) + ' to ' + fmt(b.end));
-      var extraHtml = (b.extraJobHere && !wt.off) ? ('<div class="extraflag"><span class="dot"></span><span>Also today: ' + wt.html + '</span></div>') : '';
+      var extraStatus = hasExtraJobToday ? (extraDone ? ' (done ✓)' : ' (not checked yet)') : '';
+      var extraHtml = (b.extraJobHere && !wt.off) ? ('<div class="extraflag"><span class="dot"></span><span>Also today: ' + wt.html + extraStatus + '</span></div>') : '';
       row.innerHTML =
         '<div class="tstatus">' + (isPointEvent ? '' : (done ? '✓' : '')) + '</div>' +
         '<span class="temoji">' + b.emoji + '</span>' +
@@ -331,24 +372,51 @@
     }
     summaryEl.textContent = 'Loading…';
     listEl.innerHTML = '';
-    fetch(API + '/checks/' + dateStr)
-      .then(function(r) { return r.json(); })
-      .then(function(checks) {
-        checks = checks || {};
-        var doneCount = 0;
+    Promise.all([
+      fetch(API + '/checks/' + dateStr).then(function(r) { return r.json(); }),
+      fetch(API + '/opened/' + dateStr).then(function(r) { return r.json(); })
+    ])
+      .then(function(results) {
+        var checks = results[0] || {};
+        var opened = results[1] || {};
+        var isToday = dateStr === todayStr;
+        var hDow = d.getDay();
+
+        // A day counts as "opened" if the heartbeat fired, or (for days before the
+        // heartbeat existed) if any checkbox was ever touched that day.
+        var wasOpened = !!opened.first || Object.keys(checks).length > 0;
+        if (!isToday && !wasOpened) {
+          summaryEl.textContent = fmtDateLong(d) + ': the schedule page was not opened this day.';
+          summaryEl.className = 'historysummary hasgaps';
+          listEl.innerHTML = '<div class="dayoffnote">No tasks can be marked skipped or done, the page was never loaded, so nothing was tapped.</div>';
+          return;
+        }
+
+        var items = checkable.map(function(b) { return { id: b.id, label: b.task, emoji: b.emoji, end: b.end }; });
+        if (dayHasExtraJob(hDow)) {
+          items.push({ id: 'extra', label: 'Extra job: ' + WEEKDAY_TASKS[hDow].html, emoji: '⭐', end: EXTRA_DEADLINE });
+        }
+
+        var doneCount = 0, skipped = 0, pending = 0;
         listEl.innerHTML = '';
-        checkable.forEach(function(b) {
+        items.forEach(function(b) {
           var done = checks[b.id] === true;
-          if (done) doneCount++;
+          var isPending = !done && isToday && b.end > nowMin;
+          if (done) doneCount++; else if (isPending) pending++; else skipped++;
           var row = document.createElement('div');
-          row.className = 'historyrow' + (done ? ' done' : ' skipped');
+          row.className = 'historyrow' + (done ? ' done' : (isPending ? ' pending' : ' skipped'));
           row.innerHTML = '<div class="hstatus">' + (done ? '✓' : '') + '</div>' +
             '<span class="temoji">' + b.emoji + '</span>' +
-            '<div class="tinfo"><div class="htask">' + b.task + '</div></div>';
+            '<div class="tinfo"><div class="htask">' + b.label + '</div></div>';
           listEl.appendChild(row);
         });
-        var skipped = checkable.length - doneCount;
-        summaryEl.textContent = fmtDateLong(d) + ': ' + doneCount + ' of ' + checkable.length + ' done' + (skipped ? ', ' + skipped + ' skipped' : ', nothing skipped');
+
+        var parts = doneCount + ' of ' + items.length + ' done';
+        if (skipped) parts += ', ' + skipped + (isToday ? ' behind' : ' skipped');
+        if (pending) parts += ', ' + pending + ' still to come';
+        if (!skipped && !pending) parts += ', nothing skipped';
+        var openedNote = opened.first ? (' · Page first opened ' + fmtHM(opened.first)) : '';
+        summaryEl.textContent = fmtDateLong(d) + ': ' + parts + openedNote;
         summaryEl.className = 'historysummary' + (skipped ? ' hasgaps' : '');
       })
       .catch(function() {
@@ -382,6 +450,55 @@
     loadHistory(todayStr);
   }
 
+  // ---- Last 7 days at a glance: one column per day, one row per task, so patterns
+  // (the same task skipped week after week) are visible without clicking day by day ----
+  function loadWeekGrid() {
+    var dates = [];
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(now);
+      d.setDate(d.getDate() - i);
+      dates.push(dateStrOf(d));
+    }
+    Promise.all(dates.map(function(ds) {
+      return Promise.all([
+        fetch(API + '/checks/' + ds).then(function(r) { return r.json(); }).catch(function() { return {}; }),
+        fetch(API + '/opened/' + ds).then(function(r) { return r.json(); }).catch(function() { return {}; })
+      ]);
+    })).then(function(results) {
+      var head = '<tr><th class="tasklabel">Task</th>';
+      dates.forEach(function(ds) {
+        var d = new Date(ds + 'T00:00:00');
+        head += '<th' + (ds === todayStr ? ' class="gtoday"' : '') + '>' + WEEKDAY_NAMES[d.getDay()].slice(0, 3) + '<br>' + d.getDate() + '</th>';
+      });
+      document.getElementById('weekgrid-head').innerHTML = head + '</tr>';
+
+      var rows = checkable.map(function(b) { return { id: b.id, end: b.end }; });
+      rows.push({ id: 'extra', end: EXTRA_DEADLINE, extraRow: true });
+
+      var body = '';
+      rows.forEach(function(rw) {
+        body += '<tr><td class="tasklabel">' + (SHORT_LABELS[rw.id] || rw.id) + '</td>';
+        dates.forEach(function(ds, di) {
+          var hDow = new Date(ds + 'T00:00:00').getDay();
+          var checks = results[di][0] || {};
+          var opened = results[di][1] || {};
+          var wasOpened = !!opened.first || Object.keys(checks).length > 0;
+          var isToday = ds === todayStr;
+          var cls, mark;
+          if (hDow === 0) { cls = 'goff'; mark = '−'; }
+          else if (rw.extraRow && !dayHasExtraJob(hDow)) { cls = 'goff'; mark = '−'; }
+          else if (!isToday && !wasOpened) { cls = 'goff'; mark = '?'; }
+          else if (checks[rw.id] === true) { cls = 'gdone'; mark = '✓'; }
+          else if (isToday && rw.end > nowMin) { cls = 'gpend'; mark = '·'; }
+          else { cls = 'gskip'; mark = '✕'; }
+          body += '<td class="' + cls + '">' + mark + '</td>';
+        });
+        body += '</tr>';
+      });
+      document.getElementById('weekgrid-body').innerHTML = body;
+    });
+  }
+
   function load() {
     document.getElementById('progress-count').textContent = 'Loading…';
     fetch(API + '/checks/' + todayStr)
@@ -394,9 +511,14 @@
       .catch(function() { renderCompliance({}); });
   }
 
-  document.getElementById('refresh-btn').addEventListener('click', load);
+  document.getElementById('refresh-btn').addEventListener('click', function() {
+    load();
+    loadWeekGrid();
+    loadHistory(document.getElementById('history-date').value || todayStr);
+  });
   load();
   initHistory();
+  loadWeekGrid();
 })();
 </script>
 </body>
