@@ -54,7 +54,7 @@
   .metaline { font-family: var(--font-ui); font-size: 0.8125rem; color: var(--fg-2); margin: 0; }
 
   .tilegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
-  .tile { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-card); padding: 18px 20px; }
+  .tile { background: var(--bg-1); border: 1px solid var(--bg-3); box-shadow: var(--shadow-card); padding: 18px 20px; grid-column: span 2; }
   .tile.now { grid-column: span 2; box-shadow: var(--shadow-raised); }
   .tile.streak { grid-column: span 2; background: var(--streak-soft); border-color: rgba(217,123,32,0.3); display: none; }
   .tile .ttask { font-family: var(--font-serif); font-weight: 600; color: var(--fg-0); line-height: 1.25; margin: 2px 0 3px 0; }
